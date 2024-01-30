@@ -20,7 +20,8 @@
       "extensions": [
         "Vue.volar",
         "Vue.vscode-typescript-vue-plugin",
-        "esbenp.prettier-vscode"
+        "esbenp.prettier-vscode",
+        "ms-azuretools.vscode-docker"
       ]
     }
   }

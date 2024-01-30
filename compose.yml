@@ -1,0 +1,20 @@
+name: local-chat
+
+services:
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - 11434:11434
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - capabilities: [gpu]
+    #           driver: amd
+    #           count: 1
+
+volumes:
+  ollama_data: {}
