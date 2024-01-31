@@ -7,14 +7,28 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "compile": "tsc --noEmit",
+    "lint": "eslint --ext .ts,.vue src --max-warnings 0"
   },
   "dependencies": {
+    "loglevel": "^1.9.1",
+    "ollama": "^0.4.4",
+    "vite-tsconfig-paths": "^4.3.1",
     "vue": "^3.3.11"
   },
   "devDependencies": {
+    "@tsconfig/node20": "^20.1.2",
+    "@tsconfig/recommended": "^1.0.3",
+    "@tsconfig/strictest": "^2.0.2",
+    "@types/eslint": "^8",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^6.20.0",
+    "@typescript-eslint/parser": "^6.20.0",
     "@vitejs/plugin-vue": "^4.5.2",
     "autoprefixer": "^10.4.17",
+    "eslint": "^8.56.0",
+    "eslint-plugin-vue": "^9.21.0",
     "postcss": "^8.4.33",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.2.2",
