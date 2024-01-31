@@ -1,13 +1,22 @@
 <script setup lang="ts">
 // import { ollama } from "../libs/ollama";
-import type { ChatRequest, ChatResponse } from "ollama";
+import type { ChatRequest, ChatResponse, Message } from "ollama";
 import { ref } from "vue";
 import { OLLAMA_URL } from "../config";
 import { logger } from "../libs/logger";
 
+const { messages = [] } = defineProps<{
+  messages: Message[];
+  done: boolean;
+}>();
+
 const emit = defineEmits<{
   "on-receive-response": [response: ChatResponse];
+  "on-receive-message": [message: Message];
+  "on-set-done": [done: boolean];
+  "on-reset-responses": [];
 }>();
+
 const prompt = ref("");
 
 const onSubmit = async () => {
@@ -27,16 +36,22 @@ const onSubmit = async () => {
     //   logger.info(part);
     // }
 
+    emit("on-set-done", false);
+
+    const userMessage: Message = {
+      role: "user",
+      content: prompt.value,
+    };
+    emit("on-receive-message", userMessage);
+
+    prompt.value = "";
     const body: ChatRequest = {
       model: "llama2",
-      messages: [
-        {
-          role: "user",
-          content: prompt.value,
-        },
-      ],
+      messages,
       stream: true,
     };
+    logger.debug(body.messages);
+
     const response = await fetch(`${OLLAMA_URL}/api/chat`, {
       method: "post",
       headers: {
@@ -52,9 +67,19 @@ const onSubmit = async () => {
     let done = false;
     let value: Uint8Array | undefined;
 
+    const messageChunks: string[] = [];
+
     do {
       ({ done, value } = await reader.read());
       if (done) {
+        const assistantMessage: Message = {
+          role: "assistant",
+          content: messageChunks.join(""),
+        };
+        emit("on-receive-message", assistantMessage);
+        emit("on-set-done", true);
+        emit("on-reset-responses");
+
         logger.info("done");
         return;
       }
@@ -62,9 +87,8 @@ const onSubmit = async () => {
       const chunk = decoder.decode(value);
       const jsonChunk = JSON.parse(chunk) as ChatResponse;
 
+      messageChunks.push(jsonChunk.message.content);
       emit("on-receive-response", jsonChunk);
-
-      logger.info(jsonChunk);
     } while (!done);
   } catch (e) {
     logger.error(e);
