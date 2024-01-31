@@ -1,93 +1,23 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import type { Completion } from "../types";
+import { ref } from "vue";
 // import { ollama } from "../libs/ollama";
-import { OLLAMA_URL } from "../config";
-import { logger } from "../libs/logger";
+import type { ChatResponse } from "ollama";
 
-const prompt = ref("");
-const messages = ref<Completion[]>([]);
+import ChatMessages from "./ChatMessages.vue";
+import ChatPrompt from "./ChatPrompt.vue";
 
-const messageText = computed(() =>
-  messages.value.map((message) => message.response).join(""),
-);
+const responses = ref<ChatResponse[]>([]);
 
-const onSubmit = async () => {
-  try {
-    messages.value = [];
-
-    /*
-      ollama js not currently working due to following issue:
-      https://github.com/ollama/ollama-js/issues/33
-    */
-    // const response = await ollama.generate({
-    //   model: "llama2",
-    //   prompt: prompt.value,
-    //   stream: true,
-    // });
-    // logger.info(response);
-
-    // for await (const part of response) {
-    //   logger.info(part);
-    // }
-
-    const response = await fetch(`${OLLAMA_URL}/api/generate`, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "llama2",
-        prompt: prompt.value,
-        //   stream: false,
-      }),
-    });
-    if (!response.body) return;
-
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-
-    let done = false;
-    let value: Uint8Array | undefined;
-
-    do {
-      ({ done, value } = await reader.read());
-      if (done) {
-        logger.info("done");
-        return;
-      }
-
-      const chunk = decoder.decode(value);
-      const jsonChunk = JSON.parse(chunk) as Completion;
-      messages.value.push(jsonChunk);
-
-      logger.info(jsonChunk);
-    } while (!done);
-  } catch (e) {
-    logger.error(e);
-  }
+const onReceiveResponse = (response: ChatResponse) => {
+  responses.value.push(response);
 };
 </script>
 
 <template>
-  <div class="h-full w-full flex justify-center">
-    <div>
-      <span>Start chatting...</span>
-    </div>
-    <div>
-      <form @submit.prevent="onSubmit">
-        <input
-          v-model="prompt"
-          class="bg-transparent border-2 border-black dark:border-white rounded-md p-1"
-        />
-      </form>
-    </div>
-    <div>
-      <textarea
-        class="bg-transparent dark:text-white"
-        :value="messageText"
-        readonly
-      />
+  <div class="h-full w-full flex flex-col justify-center items-center">
+    <div class="flex flex-col h-full w-full md:max-w-3xl justify-end">
+      <ChatMessages :responses="responses" />
+      <ChatPrompt @on-receive-response="onReceiveResponse" />
     </div>
   </div>
 </template>
