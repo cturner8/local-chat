@@ -12,6 +12,7 @@
     "lint": "eslint --ext .ts,.vue src --max-warnings 0"
   },
   "dependencies": {
+    "@sqlite.org/sqlite-wasm": "^3.45.1-build1",
     "loglevel": "^1.9.1",
     "ollama": "^0.4.4",
     "vite-tsconfig-paths": "^4.3.1",

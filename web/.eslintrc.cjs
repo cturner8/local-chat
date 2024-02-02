@@ -22,6 +22,7 @@ module.exports = {
     "vue/max-attributes-per-line": "off",
     "vue/singleline-html-element-content-newline": "off",
     "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/unbound-method": "off",
   },
   parser: "vue-eslint-parser",
   parserOptions: {

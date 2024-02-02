@@ -5,6 +5,15 @@ services:
     build: web
     ports:
       - 80:80
+      - 443:443
+    configs:
+      - source: nginx_conf
+        target: /etc/nginx/conf.d/default.conf
+    secrets:
+      - source: web_cert
+        target: site.crt
+      - source: web_key
+        target: site.key
     networks:
       - local_chat
 
@@ -23,3 +32,13 @@ volumes:
 
 networks:
   local_chat: {}
+
+configs:
+  nginx_conf:
+    file: ./web/nginx.conf
+
+secrets:
+  web_cert:
+    file: ./web/certs/localhost.pem
+  web_key:
+    file: ./web/certs/localhost-key.pem
