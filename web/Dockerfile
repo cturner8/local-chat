@@ -1,6 +1,7 @@
 # syntax=docker/dockerfile:1
 
 ARG NODE_VERSION=lts
+ARG NGINX_TAG=alpine
 
 FROM node:${NODE_VERSION}-alpine as base
 
@@ -24,6 +25,6 @@ COPY . .
 
 RUN yarn build
 
-FROM nginx:latest 
+FROM nginx:${NGINX_TAG} 
 
 COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
