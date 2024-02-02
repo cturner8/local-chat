@@ -1,5 +1,7 @@
-import logger from "loglevel";
 import type { LogLevelDesc } from "loglevel";
+import logger from "loglevel";
 import { LOG_LEVEL } from "../config";
-logger.setDefaultLevel(LOG_LEVEL as LogLevelDesc);
+if (LOG_LEVEL) {
+  logger.setDefaultLevel(LOG_LEVEL as LogLevelDesc);
+}
 export { logger };
