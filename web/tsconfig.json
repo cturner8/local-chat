@@ -2,7 +2,7 @@
   "extends": [
     "@tsconfig/node20/tsconfig.json",
     "@tsconfig/recommended/tsconfig.json",
-    "@tsconfig/strictest/tsconfig.json"
+    "@tsconfig/strictest/tsconfig.json",
   ],
   "compilerOptions": {
     "target": "ES2020",
@@ -23,13 +23,19 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
 
     // "baseUrl": ".",
     // "paths": {
     //   "@/*": ["src/*"]
     // }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "tailwind.config.ts",
+    ".eslintrc.cjs",
+  ],
+  "references": [{ "path": "./tsconfig.node.json" }],
 }

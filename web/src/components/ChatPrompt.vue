@@ -15,6 +15,7 @@ const emit = defineEmits<{
   "on-receive-message": [message: Message];
   "on-set-done": [done: boolean];
   "on-reset-responses": [];
+  "on-submit-prompt": [];
 }>();
 
 const prompt = ref("");
@@ -36,6 +37,7 @@ const onSubmit = async () => {
     //   logger.info(part);
     // }
 
+    emit("on-submit-prompt");
     emit("on-set-done", false);
 
     const userMessage: Message = {
@@ -100,9 +102,8 @@ const onSubmit = async () => {
   <form @submit.prevent="onSubmit" class="w-full p-2">
     <input
       v-model="prompt"
-      class="w-full bg-transparent border-2 border-black dark:border-white rounded-md p-3"
+      class="w-full bg-transparent border-2 border-secondary focus:outline-primary rounded-md p-3"
+      placeholder="Ask a question..."
     />
   </form>
 </template>
-
-<style scoped></style>

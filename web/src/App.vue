@@ -4,10 +4,8 @@ import Chat from "./components/Chat.vue";
 
 <template>
   <div
-    class="w-screen h-screen [color-scheme:light_dark] dark:bg-slate-900 dark:text-white font-sans"
+    class="w-screen h-screen [color-scheme:light_dark] dark:bg-neutral dark:text-white font-sans"
   >
     <Chat />
   </div>
 </template>
-
-<style scoped></style>
