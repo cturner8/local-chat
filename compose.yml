@@ -2,7 +2,9 @@ name: local-chat
 
 services:
   web:
-    build: web
+    build:
+      context: web
+      target: runner
     ports:
       - 80:80
       - 443:443

@@ -1,0 +1,29 @@
+services:
+  web:
+    build:
+      context: web
+      target: dev
+    configs: []
+    ports:
+      - 5173:5173
+      - 3101:3101
+    environment:
+      HTTPS_CERT_PATH: /run/secrets/site.crt
+      HTTPS_KEY_PATH: /run/secrets/site.key
+      OLLAMA_PROXY_URL: http://ollama:11434
+    develop:
+      watch:
+        - path: web/Dockerfile
+          action: rebuild
+        - path: web/package.json
+          action: rebuild
+        - path: web/yarn.lock
+          action: rebuild
+        - action: sync
+          path: web/
+          target: /usr/src/app/
+          ignore:
+            - web/node_modules/
+            - web/Dockerfile
+            - web/.dockerignore
+            # - web/vite.config.ts.timestamp-*.mjs

@@ -34,6 +34,8 @@
 LICENSE
 README.md
 
+**/node_modules
+
 .yarn/*
 !.yarn/cache
 !.yarn/patches
@@ -44,3 +46,5 @@ README.md
 
 nginx.conf
 certs
+
+# vite.config.ts.timestamp-*.mjs

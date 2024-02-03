@@ -2,10 +2,23 @@ import vue from "@vitejs/plugin-vue";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
+const {
+  HTTPS_CERT_PATH = "./certs/localhost.pem",
+  HTTPS_KEY_PATH = "./certs/localhost-key.pem",
+  OLLAMA_PROXY_URL = "http://host.docker.internal:11434",
+} = process.env;
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue(), tsconfigPaths()],
   server: {
+    host: true,
+    hmr: {
+      port: 3101,
+    },
+    proxy: {
+      "/api": OLLAMA_PROXY_URL,
+    },
     headers: {
       "Cross-Origin-Opener-Policy": "same-origin",
       "Cross-Origin-Embedder-Policy": "require-corp",
@@ -13,8 +26,8 @@ export default defineConfig({
       "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
     },
     https: {
-      cert: "./certs/localhost.pem",
-      key: "./certs/localhost-key.pem",
+      cert: HTTPS_CERT_PATH,
+      key: HTTPS_KEY_PATH,
     },
   },
   optimizeDeps: {

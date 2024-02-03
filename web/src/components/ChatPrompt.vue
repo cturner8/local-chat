@@ -25,7 +25,6 @@ const onSubmit = async () => {
     /*
       ollama js not currently working due to following issue:
       https://github.com/ollama/ollama-js/issues/33
-    */
     // const response = await ollama.generate({
     //   model: "llama2",
     //   prompt: prompt.value,
@@ -36,6 +35,7 @@ const onSubmit = async () => {
     // for await (const part of response) {
     //   logger.info(part);
     // }
+    */
 
     emit("on-submit-prompt");
     emit("on-set-done", false);

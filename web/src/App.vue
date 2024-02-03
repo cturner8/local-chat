@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted } from "vue";
 import Chat from "./components/Chat.vue";
-
 import { logger } from "./libs/logger";
-
-// import type { Args } from "./workers/sqlite";
 import SqliteWorker from "./workers/sqlite?worker";
 
 const sqlite = new SqliteWorker();
@@ -13,13 +10,6 @@ sqlite.onmessage = (message) => {
 };
 
 onMounted(() => {
-  // const now = Date.now();
-  // const args: Args = [
-  //   `insert into "chats" (id, createdDate, updatedDate) values (?, ?, ?)`,
-  //   [crypto.randomUUID(), now, now],
-  // ];
-  // sqlite.postMessage(args);
-
   sqlite.postMessage([`select * from chats`, []]);
 });
 
