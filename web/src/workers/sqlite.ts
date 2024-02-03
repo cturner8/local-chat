@@ -15,12 +15,13 @@ export enum MessageEvents {
 }
 export type Args = [string, BindingSpec];
 
+const DB_FILE_NAME = "chats.db";
+
 let db: Database | null = null;
 
 onmessage = async (message: MessageEvent<Args>) => {
   logger.trace(message);
   logger.trace("Processing message:", message.data);
-
   return execute(message.data);
 };
 
@@ -32,38 +33,34 @@ const start = async () => {
       printErr: logger.error,
     });
 
-    const dbFileName = "/chats.db";
     const dbFlags = LOG_LEVEL === "trace" ? "ct" : "c";
 
     const opfsAvailable = "opfs" in sqlite3;
     db = opfsAvailable
-      ? new sqlite3.oo1.OpfsDb(dbFileName, dbFlags)
-      : new sqlite3.oo1.DB(dbFileName, dbFlags);
-    logger.debug("Created database", db.filename);
-    logger.debug("OPFS Available", opfsAvailable);
+      ? new sqlite3.oo1.OpfsDb(DB_FILE_NAME, dbFlags)
+      : new sqlite3.oo1.DB(DB_FILE_NAME, dbFlags);
+    logger.trace("Created database", db.filename);
+    logger.trace("OPFS Available", opfsAvailable);
 
-    logger.debug("Creating tables...");
+    logger.trace("Creating tables...");
 
     db.exec(`CREATE TABLE IF NOT EXISTS "chats" (
         "id" TEXT NOT NULL PRIMARY KEY,
-        "title" TEXT,
+        "title" TEXT NOT NULL,
         "createdDate" INTEGER NOT NULL,
         "updatedDate" INTEGER NOT NULL
     )`);
-    db.exec(`CREATE TABLE IF NOT EXISTS "messages" (
+    db.exec(`CREATE TABLE IF NOT EXISTS "chat_messages" (
         "id" TEXT NOT NULL PRIMARY KEY,
         "chatId" TEXT NOT NULL,
-        "role" TEXT,
-        "content" TEXT,
+        "role" TEXT NOT NULL,
+        "content" TEXT NOT NULL,
         "createdDate" INTEGER NOT NULL,
         "updatedDate" INTEGER NOT NULL,
-        CONSTRAINT "messages_chatId_fkey" FOREIGN KEY ("chatId") REFERENCES "chats" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+        CONSTRAINT "chat_messages_chatId_fkey" FOREIGN KEY ("chatId") REFERENCES "chats" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
     )`);
-    db.exec(
-      `CREATE UNIQUE INDEX IF NOT EXISTS "messages_chatId" ON "messages"("chatId")`,
-    );
 
-    logger.debug("Tables created");
+    logger.trace("Tables created");
 
     logger.debug("SQLite initialized");
 
@@ -74,15 +71,17 @@ const start = async () => {
   }
 };
 
-const close = () => {
-  if (!db) return;
-  logger.debug("Closing SQLite");
-  db.close();
-};
+// const close = () => {
+//   if (!db) return;
+//   logger.trace("Closing SQLite");
+//   db.close();
+// };
 
 const execute = async (args: [string, BindingSpec]) => {
   logger.trace("Received execute message with args", args);
-  const db = await start();
+  if (!db) {
+    db = await start();
+  }
 
   const [sql, bind = []] = args;
   logger.debug("Executing query", sql, bind);
@@ -95,5 +94,11 @@ const execute = async (args: [string, BindingSpec]) => {
   logger.trace("Result", result);
   postMessage(result);
 
-  close();
+  // close();
 };
+
+// const drop = async () => {
+//   logger.debug("Dropping database file", DB_FILE_NAME);
+//   const root = await navigator.storage.getDirectory();
+//   return root.removeEntry(DB_FILE_NAME);
+// };

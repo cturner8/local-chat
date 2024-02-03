@@ -13,9 +13,9 @@ export default defineConfig({
   plugins: [vue(), tsconfigPaths()],
   server: {
     host: true,
-    hmr: {
-      port: 3101,
-    },
+    // hmr: {
+    //   port: 3101,
+    // },
     proxy: {
       "/api": OLLAMA_PROXY_URL,
     },

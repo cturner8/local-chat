@@ -4,13 +4,75 @@ import { ref } from "vue";
 import type { ChatResponse, Message } from "ollama";
 
 import { logger } from "../libs/logger";
+import type { Chat, ChatMessage } from "../schemas";
+import SqliteWorker from "../workers/sqlite?worker";
 import ChatMessages from "./ChatMessages.vue";
 import ChatPrompt from "./ChatPrompt.vue";
+
+const sqlite = new SqliteWorker();
+sqlite.onmessage = (message) => {
+  logger.info(message.data);
+};
+
+const chatId = ref("");
 
 const promptSubmitted = ref(false);
 const done = ref(false);
 const responses = ref<ChatResponse[]>([]);
-const messages = ref<Message[]>([]);
+const chatMessages = ref<ChatMessage[]>([]);
+
+const initChat = () => {
+  logger.debug("Initializing new chat");
+
+  chatId.value = crypto.randomUUID();
+  const now = Date.now();
+
+  const chat: Chat = {
+    id: chatId.value,
+    title: "new chat",
+    createdDate: now,
+    updatedDate: now,
+  };
+
+  logger.debug("Chat", chat);
+
+  sqlite.postMessage([
+    `insert into chats (id, title, createdDate, updatedDate) values (?, ?, ?, ?)`,
+    [chat.id, chat.title, chat.createdDate, chat.updatedDate],
+  ]);
+};
+
+const saveChatMessage = (message: Message) => {
+  logger.debug("Saving chat message", message);
+
+  const id = crypto.randomUUID();
+  const now = Date.now();
+
+  const { role, content } = message;
+  const chatMessage: ChatMessage = {
+    id,
+    chatId: chatId.value,
+    role,
+    content,
+    createdDate: now,
+    updatedDate: now,
+  };
+
+  logger.debug("Chat message", chatMessage);
+
+  sqlite.postMessage([
+    `insert into chat_messages (id, chatId, role, content, createdDate, updatedDate) values (?, ?, ?, ?, ?, ?)`,
+    [
+      chatMessage.id,
+      chatMessage.chatId,
+      chatMessage.role,
+      chatMessage.content,
+      chatMessage.createdDate,
+      chatMessage.updatedDate,
+    ],
+  ]);
+  return chatMessage;
+};
 
 const onResetResponses = () => {
   logger.trace();
@@ -23,7 +85,9 @@ const onReceiveResponse = (response: ChatResponse) => {
 
 const onReceiveMessage = (message: Message) => {
   logger.trace(message);
-  messages.value.push(message);
+  if (!chatId.value) initChat();
+  const chatMessage = saveChatMessage(message);
+  chatMessages.value.push(chatMessage);
 };
 
 const onSetDone = (d: boolean) => {
@@ -44,7 +108,7 @@ const onSubmitPrompt = () => {
     <div class="flex flex-col h-full w-full md:max-w-3xl justify-end">
       <ChatMessages
         :responses="responses"
-        :messages="messages"
+        :messages="chatMessages"
         :done="done"
         :prompt-submitted="promptSubmitted"
       />
@@ -54,7 +118,7 @@ const onSubmitPrompt = () => {
         @on-set-done="onSetDone"
         @on-reset-responses="onResetResponses"
         @on-submit-prompt="onSubmitPrompt"
-        :messages="messages"
+        :messages="chatMessages"
         :done="done"
       />
     </div>

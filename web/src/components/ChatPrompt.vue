@@ -4,9 +4,10 @@ import type { ChatRequest, ChatResponse, Message } from "ollama";
 import { ref } from "vue";
 import { OLLAMA_URL } from "../config";
 import { logger } from "../libs/logger";
+import type { ChatMessage } from "../schemas";
 
 const { messages = [] } = defineProps<{
-  messages: Message[];
+  messages: ChatMessage[];
   done: boolean;
 }>();
 

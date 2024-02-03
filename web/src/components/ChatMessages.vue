@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { ChatResponse, Message } from "ollama";
+import type { ChatResponse } from "ollama";
+import type { ChatMessage } from "../schemas";
 
 const {
   responses = [],
@@ -8,7 +9,7 @@ const {
   promptSubmitted,
 } = defineProps<{
   responses: ChatResponse[];
-  messages: Message[];
+  messages: ChatMessage[];
   done: boolean;
   promptSubmitted: boolean;
 }>();
@@ -17,8 +18,8 @@ const {
 <template>
   <div class="flex flex-col grow gap-4 w-full h-full overflow-y-auto p-2">
     <p
-      v-for="(message, index) in messages"
-      :key="index"
+      v-for="message in messages"
+      :key="message.id"
       :class="[
         'dark:text-white rounded-md p-3',
         message.role === 'user' && 'bg-secondary',

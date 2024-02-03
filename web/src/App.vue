@@ -5,12 +5,13 @@ import { logger } from "./libs/logger";
 import SqliteWorker from "./workers/sqlite?worker";
 
 const sqlite = new SqliteWorker();
-sqlite.onmessage = (message) => {
-  logger.info("Received worker message", message.data);
+sqlite.onmessage = (message: MessageEvent<[number]>) => {
+  const [chatsCount] = message.data;
+  logger.info("Number of user chats:", chatsCount);
 };
 
 onMounted(() => {
-  sqlite.postMessage([`select * from chats`, []]);
+  sqlite.postMessage([`select count(*) from chats`, []]);
 });
 
 onBeforeUnmount(() => {
