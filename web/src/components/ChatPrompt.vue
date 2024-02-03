@@ -1,9 +1,8 @@
 <script setup lang="ts">
-// import { ollama } from "../libs/ollama";
-import type { ChatRequest, ChatResponse, Message } from "ollama";
+import type { ChatResponse, Message } from "ollama";
 import { ref } from "vue";
-import { OLLAMA_URL } from "../config";
 import { logger } from "../libs/logger";
+import { ollama } from "../libs/ollama";
 import type { ChatMessage } from "../schemas";
 
 const { messages = [] } = defineProps<{
@@ -23,21 +22,6 @@ const prompt = ref("");
 
 const onSubmit = async () => {
   try {
-    /*
-      ollama js not currently working due to following issue:
-      https://github.com/ollama/ollama-js/issues/33
-    // const response = await ollama.generate({
-    //   model: "llama2",
-    //   prompt: prompt.value,
-    //   stream: true,
-    // });
-    // logger.info(response);
-
-    // for await (const part of response) {
-    //   logger.info(part);
-    // }
-    */
-
     emit("on-submit-prompt");
     emit("on-set-done", false);
 
@@ -48,51 +32,30 @@ const onSubmit = async () => {
     emit("on-receive-message", userMessage);
 
     prompt.value = "";
-    const body: ChatRequest = {
+    logger.debug(messages);
+
+    const response = await ollama.chat({
       model: "llama2",
       messages,
       stream: true,
-    };
-    logger.debug(body.messages);
-
-    const response = await fetch(`${OLLAMA_URL}/api/chat`, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
     });
-    if (!response.body) return;
-
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-
-    let done = false;
-    let value: Uint8Array | undefined;
+    logger.trace(response);
 
     const messageChunks: string[] = [];
+    for await (const part of response) {
+      messageChunks.push(part.message.content);
+      emit("on-receive-response", part);
+    }
 
-    do {
-      ({ done, value } = await reader.read());
-      if (done) {
-        const assistantMessage: Message = {
-          role: "assistant",
-          content: messageChunks.join(""),
-        };
-        emit("on-receive-message", assistantMessage);
-        emit("on-set-done", true);
-        emit("on-reset-responses");
+    const assistantMessage: Message = {
+      role: "assistant",
+      content: messageChunks.join(""),
+    };
+    emit("on-receive-message", assistantMessage);
+    emit("on-set-done", true);
+    emit("on-reset-responses");
 
-        logger.info("done");
-        return;
-      }
-
-      const chunk = decoder.decode(value);
-      const jsonChunk = JSON.parse(chunk) as ChatResponse;
-
-      messageChunks.push(jsonChunk.message.content);
-      emit("on-receive-response", jsonChunk);
-    } while (!done);
+    logger.info("done");
   } catch (e) {
     logger.error(e);
   }

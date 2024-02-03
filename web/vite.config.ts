@@ -1,5 +1,6 @@
 import vue from "@vitejs/plugin-vue";
 import { defineConfig } from "vite";
+import { nodePolyfills } from "vite-plugin-node-polyfills";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 const {
@@ -10,12 +11,22 @@ const {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), tsconfigPaths()],
+  plugins: [
+    vue(),
+    tsconfigPaths(),
+    nodePolyfills({
+      include: ["fs", "path", "crypto", "os", "stream", "util"],
+      overrides: {
+        // Since `fs` is not supported in browsers, we can use the `memfs` package to polyfill it.
+        fs: "memfs",
+      },
+    }),
+  ],
   server: {
     host: true,
-    hmr: {
-      port: 3101,
-    },
+    // hmr: {
+    //   port: 3101,
+    // },
     proxy: {
       "/api": OLLAMA_PROXY_URL,
     },

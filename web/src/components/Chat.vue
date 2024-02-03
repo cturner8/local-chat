@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref } from "vue";
-// import { ollama } from "../libs/ollama";
 import type { ChatResponse, Message } from "ollama";
 
 import { logger } from "../libs/logger";
