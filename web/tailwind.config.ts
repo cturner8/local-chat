@@ -9,9 +9,11 @@ const config: Config = {
         sans: ["Lato", ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        primary: "#85FFC7",
-        secondary: "#297373",
+        primary: "#297373",
+        secondary: "#85FFC7",
         neutral: "#0F172A",
+        layout: "#020617",
+        contrast: "#1e293b",
       },
     },
   },

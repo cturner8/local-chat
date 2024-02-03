@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted } from "vue";
 import Chat from "./components/Chat.vue";
+import ChatHistory from "./components/ChatHistory.vue";
 import { logger } from "./libs/logger";
 import SqliteWorker from "./workers/sqlite?worker";
 
@@ -20,8 +21,9 @@ onBeforeUnmount(() => {
 
 <template>
   <div
-    class="w-screen h-screen [color-scheme:light_dark] dark:bg-neutral dark:text-white font-sans"
+    class="w-screen h-screen flex flex-row [color-scheme:light_dark] dark:bg-neutral dark:text-white font-sans"
   >
+    <ChatHistory />
     <Chat />
   </div>
 </template>

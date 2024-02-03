@@ -103,7 +103,7 @@ const onSubmit = async () => {
   <form @submit.prevent="onSubmit" class="w-full p-2">
     <input
       v-model="prompt"
-      class="w-full bg-transparent border-2 border-secondary focus:outline-primary rounded-md p-3"
+      class="w-full bg-transparent border-2 border-primary focus:outline-secondary rounded-md p-3"
       placeholder="Ask a question..."
     />
   </form>

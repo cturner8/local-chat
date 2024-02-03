@@ -16,18 +16,23 @@ const {
 </script>
 
 <template>
-  <div class="flex flex-col grow gap-4 w-full h-full overflow-y-auto p-2">
+  <div
+    class="flex flex-col grow gap-4 w-full h-full overflow-y-auto p-2 text-left"
+  >
     <p
       v-for="message in messages"
       :key="message.id"
       :class="[
-        'dark:text-white rounded-md p-3',
-        message.role === 'user' && 'bg-secondary',
+        'dark:text-white rounded-md p-3 text-pretty',
+        message.role === 'user' && 'bg-primary',
       ]"
     >
       {{ message.content }}
     </p>
-    <p v-if="!done && responses.length" class="dark:text-white rounded-md p-3">
+    <p
+      v-if="!done && responses.length"
+      class="dark:text-white rounded-md p-3 text-pretty"
+    >
       {{ responses.map((response) => response.message.content).join("") }}
     </p>
     <template v-if="!done">

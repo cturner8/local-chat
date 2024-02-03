@@ -1,22 +1,25 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, onBeforeUnmount, ref } from "vue";
 // import { ollama } from "../libs/ollama";
 import type { ChatResponse, Message } from "ollama";
 
 import { logger } from "../libs/logger";
 import type { Chat, ChatMessage } from "../schemas";
+import { chatStore } from "../stores/chatStore";
 import SqliteWorker from "../workers/sqlite?worker";
 import ChatMessages from "./ChatMessages.vue";
 import ChatPrompt from "./ChatPrompt.vue";
-
-const params = new URLSearchParams(location.search);
 
 const sqlite = new SqliteWorker();
 sqlite.onmessage = (message) => {
   logger.info(message.data);
 };
 
-const chatId = ref(params.get("id") ?? "");
+onBeforeUnmount(() => {
+  sqlite.terminate();
+});
+
+const chatId = computed(() => chatStore.selectedChatId);
 
 const promptSubmitted = ref(false);
 const done = ref(false);
@@ -26,7 +29,7 @@ const chatMessages = ref<ChatMessage[]>([]);
 const initChat = () => {
   logger.debug("Initializing new chat");
 
-  chatId.value = crypto.randomUUID();
+  chatStore.selectChat(crypto.randomUUID());
   const now = Date.now();
 
   const chat: Chat = {
@@ -38,13 +41,19 @@ const initChat = () => {
 
   logger.debug("Chat", chat);
 
+  chatStore.chats = [
+    {
+      id: chat.id,
+      title: chat.title,
+    },
+    ...chatStore.chats,
+  ];
   sqlite.postMessage([
     `insert into chats (id, title, createdDate, updatedDate) values (?, ?, ?, ?)`,
     [chat.id, chat.title, chat.createdDate, chat.updatedDate],
   ]);
 
-  params.set("id", chatId.value);
-  history.pushState({}, `Chat ID: ${chatId.value}`, `?${params.toString()}`);
+  chatStore.selectChat(chatId.value);
 };
 
 const saveChatMessage = (message: Message) => {
@@ -109,7 +118,7 @@ const onSubmitPrompt = () => {
 </script>
 
 <template>
-  <div class="h-full w-full flex flex-col justify-center items-center">
+  <div class="h-full w-full flex flex-col grow justify-center items-center">
     <div class="flex flex-col h-full w-full md:max-w-3xl justify-end">
       <ChatMessages
         :responses="responses"

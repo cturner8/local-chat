@@ -4,3 +4,5 @@ export interface Chat {
   createdDate: number;
   updatedDate: number;
 }
+
+export interface ChatHistory extends Pick<Chat, "id" | "title"> {}
