@@ -9,12 +9,14 @@ import SqliteWorker from "../workers/sqlite?worker";
 import ChatMessages from "./ChatMessages.vue";
 import ChatPrompt from "./ChatPrompt.vue";
 
+const params = new URLSearchParams(location.search);
+
 const sqlite = new SqliteWorker();
 sqlite.onmessage = (message) => {
   logger.info(message.data);
 };
 
-const chatId = ref("");
+const chatId = ref(params.get("id") ?? "");
 
 const promptSubmitted = ref(false);
 const done = ref(false);
@@ -40,6 +42,9 @@ const initChat = () => {
     `insert into chats (id, title, createdDate, updatedDate) values (?, ?, ?, ?)`,
     [chat.id, chat.title, chat.createdDate, chat.updatedDate],
   ]);
+
+  params.set("id", chatId.value);
+  history.pushState({}, `Chat ID: ${chatId.value}`, `?${params.toString()}`);
 };
 
 const saveChatMessage = (message: Message) => {
