@@ -19,11 +19,11 @@ services:
           action: rebuild
         - path: web/yarn.lock
           action: rebuild
-        - action: sync
-          path: web/
+        - path: web/
           target: /usr/src/app/
+          action: sync
           ignore:
-            - web/node_modules/
-            - web/Dockerfile
-            - web/.dockerignore
-            # - web/vite.config.ts.timestamp-*.mjs
+            - ./web/node_modules/
+            - ./web/Dockerfile
+            - ./web/.dockerignore
+            - ./web/vite.config.ts.timestamp-*.mjs

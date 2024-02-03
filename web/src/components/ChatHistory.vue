@@ -8,7 +8,6 @@ import SqliteWorker from "../workers/sqlite?worker";
 
 const chats = computed(() => chatStore.chats);
 const selectedChatId = computed(() => chatStore.selectedChatId);
-// const params = computed(() => chatStore.params);
 
 const sqlite = new SqliteWorker();
 sqlite.onmessage = (message: MessageEvent<[string, string]>) => {
@@ -21,11 +20,6 @@ sqlite.onmessage = (message: MessageEvent<[string, string]>) => {
 };
 
 onMounted(() => {
-  // const idParam = params.value.get("id");
-  // if (idParam) {
-  //   chatStore.selectChat(idParam);
-  // }
-
   sqlite.postMessage([
     `select id, title from chats order by updatedDate desc`,
     [],
@@ -40,7 +34,7 @@ onBeforeUnmount(() => {
 <template>
   <div class="dark:bg-layout md:w-3/12 rounded-r-md p-3 text-left">
     <div class="flex justify-between">
-      <h2>My Chats</h2>
+      <h1>My Chats</h1>
       <button class="px-2 rounded-md hover:bg-contrast">
         <font-awesome-icon icon="fa-solid fa-plus" />
       </button>
