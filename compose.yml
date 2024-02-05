@@ -2,6 +2,7 @@ name: local-chat
 
 services:
   web:
+    image: ghcr.io/cturner8/local-chat:latest
     build:
       context: web
       target: runner

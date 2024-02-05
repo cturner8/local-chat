@@ -7,6 +7,8 @@ FROM node:${NODE_VERSION}-alpine as base
 
 FROM base as deps
 
+LABEL org.opencontainers.image.source https://github.com/cturner8/local-chat
+
 WORKDIR /tmp
 
 COPY .yarn .yarn
