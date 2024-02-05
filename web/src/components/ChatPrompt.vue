@@ -13,6 +13,7 @@ const emit = defineEmits<{
   "on-submit-prompt": [];
 }>();
 
+const model = computed(() => chatStore.model);
 const messages = computed(() => chatStore.chatMessages);
 const prompt = ref("");
 
@@ -31,7 +32,7 @@ const onSubmit = async () => {
     logger.debug(messages);
 
     const response = await ollama.chat({
-      model: "llama2",
+      model: model.value,
       messages: messages.value.map(
         ({ role, content }): Message => ({
           role,

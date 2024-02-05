@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted } from "vue";
+import ModelSelectMenu from "./ModelSelectMenu.vue";
 
 import { logger } from "../libs/logger";
 import type { ChatHistory } from "../schemas";
@@ -43,6 +44,7 @@ onBeforeUnmount(() => {
         <font-awesome-icon icon="fa-solid fa-plus" />
       </button>
     </div>
+    <ModelSelectMenu />
     <div v-if="chats.length" class="flex flex-col my-6 gap-4">
       <button
         v-for="chat in chats"

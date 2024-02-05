@@ -291,6 +291,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@headlessui/vue@npm:^1.7.18":
+  version: 1.7.18
+  resolution: "@headlessui/vue@npm:1.7.18"
+  dependencies:
+    "@tanstack/vue-virtual": "npm:^3.0.0-beta.60"
+  peerDependencies:
+    vue: ^3.2.0
+  checksum: 10c0/324b1b56cef6c4c0555e73042ab2c12c78c3cbfeede2412e3d55e4e164a00732788b8087e5a42724d1b2806e24992770f6cc2e13eca82ed342a2151882dfb49c
+  languageName: node
+  linkType: hard
+
+"@heroicons/vue@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "@heroicons/vue@npm:2.1.1"
+  peerDependencies:
+    vue: ">= 3"
+  checksum: 10c0/b80c14291a6406c794697b9a59c1c8a6f847c8ddd87044a7bdd7333250657de4fb2b5bbe00ce658580bfec2d55e033cc212986d8a0052f9da894f979436a550c
+  languageName: node
+  linkType: hard
+
 "@humanwhocodes/config-array@npm:^0.11.13":
   version: 0.11.14
   resolution: "@humanwhocodes/config-array@npm:0.11.14"
@@ -564,6 +584,24 @@ __metadata:
   bin:
     sqlite-wasm: bin/index.js
   checksum: 10c0/bb774ea390a18087837408b43ab5355dda0867c92092e15591d2bdcdfbfeab90bd6d11413ff98b2d82db48bd565a8a212fe375b53fa1116e45c8dbe912cc374a
+  languageName: node
+  linkType: hard
+
+"@tanstack/virtual-core@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@tanstack/virtual-core@npm:3.0.0"
+  checksum: 10c0/d0899fe470b43f80a2ccc567a01138cc015900f13d91b82abc784fc7bc46419e9c8b99c102a5c6ee76d15933db61aecc68c0ae8e92e9cb9ded9ae2f51a01cf4c
+  languageName: node
+  linkType: hard
+
+"@tanstack/vue-virtual@npm:^3.0.0-beta.60":
+  version: 3.0.4
+  resolution: "@tanstack/vue-virtual@npm:3.0.4"
+  dependencies:
+    "@tanstack/virtual-core": "npm:3.0.0"
+  peerDependencies:
+    vue: ^2.7.0 || ^3.0.0
+  checksum: 10c0/688065a01fbd7fdf38259393e7185e9a7d19e0f52fbc2b43b4c698d77e0ccecd9e2368d254a82160aae9550d72a0ac3ec795219345c7bed01c44977c3f53d2c9
   languageName: node
   linkType: hard
 
@@ -4476,6 +4514,8 @@ __metadata:
     "@fortawesome/fontawesome-svg-core": "npm:^6.5.1"
     "@fortawesome/free-solid-svg-icons": "npm:^6.5.1"
     "@fortawesome/vue-fontawesome": "npm:^3.0.6"
+    "@headlessui/vue": "npm:^1.7.18"
+    "@heroicons/vue": "npm:^2.1.1"
     "@sqlite.org/sqlite-wasm": "npm:^3.45.1-build1"
     "@tsconfig/node20": "npm:^20.1.2"
     "@tsconfig/recommended": "npm:^1.0.3"

@@ -2,16 +2,17 @@ import { reactive, watch } from "vue";
 import { ChatHistory, ChatMessage } from "../schemas";
 
 interface ChatStore {
+  model: string;
   chats: ChatHistory[];
   messages: ChatMessage[];
   chatMessages: ChatMessage[];
   selectedChatId: string;
   fetchedChatMessageIds: string[];
+  params: URLSearchParams;
 }
 
-const params = new URLSearchParams(location.search);
-
 export const chatStore = reactive<ChatStore>({
+  model: "llama2", // TODO: default to empty string
   chats: [],
   messages: [],
   selectedChatId: "",
@@ -21,20 +22,27 @@ export const chatStore = reactive<ChatStore>({
     );
   },
   fetchedChatMessageIds: [],
+  params: new URLSearchParams(location.search),
 });
 
 watch(
   () => chatStore.selectedChatId,
-  (selectedChatId) => {
+  (selectedChatId, oldSelectedChatId) => {
+    if (selectedChatId === oldSelectedChatId) return;
     if (selectedChatId) {
-      params.set("id", selectedChatId);
+      chatStore.params.set("id", selectedChatId);
     } else {
-      params.delete("id");
+      chatStore.params.delete("id");
     }
     history.pushState(
       {},
       `Chat ID: ${selectedChatId}`,
-      `?${params.toString()}`,
+      `?${chatStore.params.toString()}`,
     );
   },
 );
+
+watch(chatStore, ({ params }) => {
+  const id = params.get("id");
+  if (id) chatStore.selectedChatId = id;
+});
