@@ -77,7 +77,7 @@ const start = async () => {
 //   db.close();
 // };
 
-const execute = async (args: [string, BindingSpec]) => {
+const execute = async (args: [string, BindingSpec?]) => {
   logger.trace("Received execute message with args", args);
   if (!db) {
     db = await start();

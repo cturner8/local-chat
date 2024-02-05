@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref } from "vue";
 import type { ChatResponse, Message } from "ollama";
+import { computed, onBeforeUnmount, ref, watch } from "vue";
 
 import { logger } from "../libs/logger";
 import type { Chat, ChatMessage } from "../schemas";
@@ -19,11 +19,23 @@ onBeforeUnmount(() => {
 });
 
 const chatId = computed(() => chatStore.selectedChatId);
+const fetchedChatMessageIds = computed(() => chatStore.fetchedChatMessageIds);
+const chatMessages = computed(() =>
+  chatStore.messages.filter((message) => message.chatId === chatId.value),
+);
+
+watch(chatId, () => {
+  logger.debug("Chat ID:", chatId.value);
+});
+
+watch(chatMessages, () => {
+  logger.debug("Store messages:", chatStore.messages);
+  logger.debug("Chat messages", chatMessages);
+});
 
 const promptSubmitted = ref(false);
 const done = ref(false);
 const responses = ref<ChatResponse[]>([]);
-const chatMessages = ref<ChatMessage[]>([]);
 
 const initChat = () => {
   logger.debug("Initializing new chat");
@@ -100,7 +112,10 @@ const onReceiveMessage = (message: Message) => {
   logger.trace(message);
   if (!chatId.value) initChat();
   const chatMessage = saveChatMessage(message);
-  chatMessages.value.push(chatMessage);
+  chatStore.messages.push(chatMessage);
+  if (!fetchedChatMessageIds.value.includes(chatId.value)) {
+    chatStore.fetchedChatMessageIds.push(chatId.value);
+  }
 };
 
 const onSetDone = (d: boolean) => {

@@ -11,7 +11,7 @@ sqlite.onmessage = (message) => {
 };
 
 onMounted(() => {
-  sqlite.postMessage([`select count(*) from chats`, []]);
+  sqlite.postMessage([`select count(*) from chats`]);
 });
 
 onBeforeUnmount(() => {

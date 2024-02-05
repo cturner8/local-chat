@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import type { ChatResponse } from "ollama";
+import { computed, onBeforeUnmount, watch } from "vue";
+import { logger } from "../libs/logger";
 import type { ChatMessage } from "../schemas";
+import { chatStore } from "../stores/chatStore";
+import SqliteWorker from "../workers/sqlite?worker";
 
 const {
   responses = [],
@@ -13,6 +17,49 @@ const {
   done: boolean;
   promptSubmitted: boolean;
 }>();
+
+const chatId = computed(() => chatStore.selectedChatId);
+const fetchedChatMessageIds = computed(() => chatStore.fetchedChatMessageIds);
+
+const sqlite = new SqliteWorker();
+sqlite.onmessage = (
+  message: MessageEvent<[string, string, string, string, number, number][]>,
+) => {
+  logger.info(message.data);
+  const mappedMessages = message.data.map(
+    ([
+      id = "",
+      chatId = "",
+      role = "",
+      content = "",
+      createdDate = 0,
+      updatedDate = 0,
+    ]): ChatMessage => ({
+      id,
+      chatId,
+      role,
+      content,
+      createdDate,
+      updatedDate,
+    }),
+  );
+
+  chatStore.messages.push(...mappedMessages);
+  chatStore.fetchedChatMessageIds.push(chatId.value);
+};
+
+watch(chatId, () => {
+  if (fetchedChatMessageIds.value.includes(chatId.value)) return;
+  logger.debug("Fetching messages for chat ID:", chatId.value);
+  sqlite.postMessage([
+    `select id, chatId, role, content, createdDate, updatedDate from chat_messages where chatId = ? order by createdDate asc`,
+    [chatId.value],
+  ]);
+});
+
+onBeforeUnmount(() => {
+  sqlite.terminate();
+});
 </script>
 
 <template>

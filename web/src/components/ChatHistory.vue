@@ -20,9 +20,10 @@ sqlite.onmessage = (message: MessageEvent<[string, string]>) => {
 };
 
 onMounted(() => {
+  const limit = 10;
   sqlite.postMessage([
-    `select id, title from chats order by updatedDate desc`,
-    [],
+    `select id, title from chats order by updatedDate desc limit ?`,
+    [limit],
   ]);
 });
 
@@ -35,7 +36,10 @@ onBeforeUnmount(() => {
   <div class="dark:bg-layout md:w-3/12 rounded-r-md p-3 text-left">
     <div class="flex justify-between">
       <h1>My Chats</h1>
-      <button class="px-2 rounded-md hover:bg-contrast">
+      <button
+        class="px-2 rounded-md hover:bg-contrast"
+        @click="chatStore.deselectChat"
+      >
         <font-awesome-icon icon="fa-solid fa-plus" />
       </button>
     </div>
