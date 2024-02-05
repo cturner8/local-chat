@@ -12,7 +12,7 @@ interface ChatStore {
 }
 
 export const chatStore = reactive<ChatStore>({
-  model: "llama2", // TODO: default to empty string
+  model: "",
   chats: [],
   messages: [],
   selectedChatId: "",

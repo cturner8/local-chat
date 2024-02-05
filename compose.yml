@@ -32,10 +32,6 @@ volumes:
 networks:
   local_chat: {}
 
-configs:
-  nginx_conf:
-    file: ./web/nginx.conf
-
 secrets:
   web_cert:
     file: ./web/certs/localhost.pem
