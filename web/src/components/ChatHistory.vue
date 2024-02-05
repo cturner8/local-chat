@@ -38,7 +38,7 @@ onBeforeUnmount(() => {
       <h1>My Chats</h1>
       <button
         class="px-2 rounded-md hover:bg-contrast"
-        @click="chatStore.deselectChat"
+        @click="chatStore.selectedChatId = ''"
       >
         <font-awesome-icon icon="fa-solid fa-plus" />
       </button>
@@ -49,7 +49,7 @@ onBeforeUnmount(() => {
         :key="chat.id"
         class="p-3 rounded-md hover:bg-contrast text-left"
         :class="{ 'bg-primary': chat.id === selectedChatId }"
-        @click="chatStore.selectChat(chat.id)"
+        @click="chatStore.selectedChatId = chat.id"
       >
         {{ chat.title }}
       </button>

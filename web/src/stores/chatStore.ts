@@ -7,10 +7,9 @@ interface ChatStore {
   chatMessages: ChatMessage[];
   selectedChatId: string;
   fetchedChatMessageIds: string[];
-  selectChat: (id: string) => void;
-  deselectChat: () => void;
-  params: URLSearchParams;
 }
+
+const params = new URLSearchParams(location.search);
 
 export const chatStore = reactive<ChatStore>({
   chats: [],
@@ -22,20 +21,20 @@ export const chatStore = reactive<ChatStore>({
     );
   },
   fetchedChatMessageIds: [],
-  params: new URLSearchParams(location.search),
-  selectChat(id: string) {
-    this.params.set("id", id);
-    this.selectedChatId = id;
-    history.pushState({}, `Chat ID: ${id}`, `?${this.params.toString()}`);
-  },
-  deselectChat() {
-    this.params.delete("id");
-    this.selectedChatId = "";
-    history.pushState({}, `Chat`, `?`);
-  },
 });
 
-watch(chatStore, ({ params }) => {
-  const id = params.get("id");
-  if (id) chatStore.selectedChatId = id;
-});
+watch(
+  () => chatStore.selectedChatId,
+  (selectedChatId) => {
+    if (selectedChatId) {
+      params.set("id", selectedChatId);
+    } else {
+      params.delete("id");
+    }
+    history.pushState(
+      {},
+      `Chat ID: ${selectedChatId}`,
+      `?${params.toString()}`,
+    );
+  },
+);

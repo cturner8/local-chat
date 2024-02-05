@@ -38,7 +38,7 @@ const responses = ref<ChatResponse[]>([]);
 const initChat = () => {
   logger.debug("Initializing new chat");
 
-  chatStore.selectChat(crypto.randomUUID());
+  chatStore.selectedChatId = crypto.randomUUID();
   const now = Date.now();
 
   const chat: Chat = {
@@ -62,7 +62,7 @@ const initChat = () => {
     [chat.id, chat.title, chat.createdDate, chat.updatedDate],
   ]);
 
-  chatStore.selectChat(chatId.value);
+  chatStore.selectedChatId = chatId.value;
 };
 
 const saveChatMessage = (message: Message) => {
