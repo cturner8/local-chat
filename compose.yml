@@ -27,7 +27,8 @@ services:
       - local_chat
 
 volumes:
-  ollama_data: {}
+  ollama_data:
+    external: true
 
 networks:
   local_chat: {}

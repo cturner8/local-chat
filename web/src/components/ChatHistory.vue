@@ -2,6 +2,7 @@
 import { computed, onBeforeUnmount, onMounted } from "vue";
 import ModelSelectMenu from "./ModelSelectMenu.vue";
 
+import { PlusIcon } from "@heroicons/vue/20/solid";
 import { logger } from "../libs/logger";
 import type { ChatHistory } from "../schemas";
 import { chatStore } from "../stores/chatStore";
@@ -11,7 +12,7 @@ const chats = computed(() => chatStore.chats);
 const selectedChatId = computed(() => chatStore.selectedChatId);
 
 const sqlite = new SqliteWorker();
-sqlite.onmessage = (message: MessageEvent<[string, string]>) => {
+sqlite.onmessage = (message: MessageEvent<[string, string][]>) => {
   logger.info(message.data);
   const mappedChats = message.data.map(
     ([id = "", title = ""]): ChatHistory => ({ id, title }),
@@ -41,7 +42,7 @@ onBeforeUnmount(() => {
         class="px-2 rounded-md hover:bg-contrast"
         @click="chatStore.selectedChatId = ''"
       >
-        <font-awesome-icon icon="fa-solid fa-plus" />
+        <PlusIcon class="h-5 w-5 dark:text-white" />
       </button>
     </div>
     <ModelSelectMenu />

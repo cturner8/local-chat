@@ -3,15 +3,30 @@ import { onBeforeUnmount, onMounted } from "vue";
 import Chat from "./components/Chat.vue";
 import ChatHistory from "./components/ChatHistory.vue";
 import { logger } from "./libs/logger";
+import { ollama } from "./libs/ollama";
+import type { Preference } from "./schemas";
+import { chatStore } from "./stores/chatStore";
 import SqliteWorker from "./workers/sqlite?worker";
 
 const sqlite = new SqliteWorker();
-sqlite.onmessage = (message) => {
-  logger.debug(message.data);
+sqlite.onmessage = (message: MessageEvent<[string, string][]>) => {
+  logger.info(message.data);
+  const mappedPreferences = message.data.map(
+    ([id = "", value = ""]): Preference => ({ id, value }),
+  );
+  chatStore.preferences = mappedPreferences;
 };
 
 onMounted(() => {
-  sqlite.postMessage([`select count(*) from chats`]);
+  sqlite.postMessage([`select id, value from preferences`]);
+  ollama
+    .list()
+    .then((response) => {
+      logger.debug(response);
+      const { models = [] } = response;
+      chatStore.models = models;
+    })
+    .catch((error) => logger.error(error));
 });
 
 onBeforeUnmount(() => {

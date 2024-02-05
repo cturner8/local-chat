@@ -1,18 +1,21 @@
+import type { ModelResponse } from "ollama";
 import { reactive, watch } from "vue";
-import { ChatHistory, ChatMessage } from "../schemas";
+import type { ChatHistory, ChatMessage, Preference } from "../schemas";
 
 interface ChatStore {
-  model: string;
+  selectedModel: string;
   chats: ChatHistory[];
   messages: ChatMessage[];
   chatMessages: ChatMessage[];
   selectedChatId: string;
   fetchedChatMessageIds: string[];
   params: URLSearchParams;
+  models: ModelResponse[];
+  preferences: Preference[];
 }
 
 export const chatStore = reactive<ChatStore>({
-  model: "",
+  selectedModel: "",
   chats: [],
   messages: [],
   selectedChatId: "",
@@ -23,6 +26,8 @@ export const chatStore = reactive<ChatStore>({
   },
   fetchedChatMessageIds: [],
   params: new URLSearchParams(location.search),
+  models: [],
+  preferences: [],
 });
 
 watch(

@@ -13,7 +13,7 @@ const emit = defineEmits<{
   "on-submit-prompt": [];
 }>();
 
-const model = computed(() => chatStore.model);
+const model = computed(() => chatStore.selectedModel);
 const messages = computed(() => chatStore.chatMessages);
 const prompt = ref("");
 
@@ -68,6 +68,7 @@ const onSubmit = async () => {
   <form @submit.prevent="onSubmit" class="w-full p-2">
     <input
       v-model="prompt"
+      :disabled="!model"
       class="w-full bg-transparent border-2 border-primary focus:outline-secondary rounded-md p-3"
       placeholder="Ask a question..."
     />

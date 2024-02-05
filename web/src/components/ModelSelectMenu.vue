@@ -8,31 +8,45 @@ import {
 } from "@headlessui/vue";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/20/solid";
 import type { ModelResponse } from "ollama";
-import { onMounted, ref, watch } from "vue";
+import { computed, onBeforeUnmount, ref, watch } from "vue";
+import { Preferences } from "../enums";
 import { logger } from "../libs/logger";
-import { ollama } from "../libs/ollama";
 import { chatStore } from "../stores/chatStore";
+import SqliteWorker from "../workers/sqlite?worker";
 
-const models = ref<ModelResponse[]>([]);
+const sqlite = new SqliteWorker();
+sqlite.onmessage = (message) => {
+  logger.info(message.data);
+};
+
+const preferredModel = computed(
+  () =>
+    chatStore.preferences.find((p) => p.id === Preferences.PreferredModel)
+      ?.value ?? "",
+);
+const models = computed(() => chatStore.models);
 const selectedModel = ref<ModelResponse | null>(null);
 
-onMounted(() => {
-  ollama
-    .list()
-    .then((response) => {
-      logger.debug(response);
-      const { models: responseModels = [] } = response;
-      const [firstModel] = responseModels;
-
-      models.value = responseModels;
-      if (firstModel) selectedModel.value = firstModel;
-    })
-    .catch((error) => logger.error(error));
+watch(preferredModel, () => {
+  const model = models.value.find((m) => m.name === preferredModel.value);
+  if (model) selectedModel.value = model;
 });
 
 watch(selectedModel, (selected) => {
   if (!selected) return;
-  chatStore.model = selected.name;
+  chatStore.selectedModel = selected.name;
+  sqlite.postMessage([
+    `insert into preferences (id, value) values (?, ?) on conflict(id) do update set value = ?`,
+    [
+      Preferences.PreferredModel,
+      chatStore.selectedModel,
+      chatStore.selectedModel,
+    ],
+  ]);
+});
+
+onBeforeUnmount(() => {
+  sqlite.terminate();
 });
 </script>
 
@@ -46,7 +60,9 @@ watch(selectedModel, (selected) => {
         class="relative w-full cursor-default rounded-md bg-white dark:bg-contrast py-1.5 pl-3 pr-10 text-left text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm sm:leading-6"
       >
         <span class="flex items-center">
-          <span class="ml-3 block truncate">{{ selectedModel?.name }}</span>
+          <span class="ml-3 block truncate">{{
+            selectedModel?.name ?? "None"
+          }}</span>
         </span>
         <span
           class="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2"

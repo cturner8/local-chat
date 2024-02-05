@@ -36,11 +36,9 @@ const start = async () => {
     const dbFlags = LOG_LEVEL === "trace" ? "ct" : "c";
 
     const opfsAvailable = "opfs" in sqlite3;
-    db = opfsAvailable
-      ? new sqlite3.oo1.OpfsDb(DB_FILE_NAME, dbFlags)
-      : new sqlite3.oo1.DB(DB_FILE_NAME, dbFlags);
-    logger.trace("Created database", db.filename);
     logger.trace("OPFS Available", opfsAvailable);
+    db = new sqlite3.oo1.OpfsDb(DB_FILE_NAME, dbFlags);
+    logger.trace("Created database", db.filename);
 
     logger.trace("Creating tables...");
 
@@ -58,6 +56,10 @@ const start = async () => {
         "createdDate" INTEGER NOT NULL,
         "updatedDate" INTEGER NOT NULL,
         CONSTRAINT "chat_messages_chatId_fkey" FOREIGN KEY ("chatId") REFERENCES "chats" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    )`);
+    db.exec(`CREATE TABLE IF NOT EXISTS "preferences" (
+      "id" TEXT NOT NULL PRIMARY KEY,
+      "value" TEXT NOT NULL
     )`);
 
     logger.trace("Tables created");
