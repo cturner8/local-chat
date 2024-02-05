@@ -4,6 +4,7 @@ import { ChatHistory, ChatMessage } from "../schemas";
 interface ChatStore {
   chats: ChatHistory[];
   messages: ChatMessage[];
+  chatMessages: ChatMessage[];
   selectedChatId: string;
   fetchedChatMessageIds: string[];
   selectChat: (id: string) => void;
@@ -15,6 +16,11 @@ export const chatStore = reactive<ChatStore>({
   chats: [],
   messages: [],
   selectedChatId: "",
+  get chatMessages(): ChatMessage[] {
+    return this.messages.filter(
+      (message) => message.chatId === this.selectedChatId,
+    );
+  },
   fetchedChatMessageIds: [],
   params: new URLSearchParams(location.search),
   selectChat(id: string) {

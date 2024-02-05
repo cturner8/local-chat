@@ -8,18 +8,17 @@ import SqliteWorker from "../workers/sqlite?worker";
 
 const {
   responses = [],
-  messages = [],
   done,
   promptSubmitted,
 } = defineProps<{
   responses: ChatResponse[];
-  messages: ChatMessage[];
   done: boolean;
   promptSubmitted: boolean;
 }>();
 
 const chatId = computed(() => chatStore.selectedChatId);
 const fetchedChatMessageIds = computed(() => chatStore.fetchedChatMessageIds);
+const messages = computed(() => chatStore.chatMessages);
 
 const sqlite = new SqliteWorker();
 sqlite.onmessage = (

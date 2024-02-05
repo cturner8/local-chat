@@ -20,9 +20,7 @@ onBeforeUnmount(() => {
 
 const chatId = computed(() => chatStore.selectedChatId);
 const fetchedChatMessageIds = computed(() => chatStore.fetchedChatMessageIds);
-const chatMessages = computed(() =>
-  chatStore.messages.filter((message) => message.chatId === chatId.value),
-);
+const chatMessages = computed(() => chatStore.chatMessages);
 
 watch(chatId, () => {
   logger.debug("Chat ID:", chatId.value);
@@ -136,7 +134,6 @@ const onSubmitPrompt = () => {
     <div class="flex flex-col h-full w-full md:max-w-3xl justify-end">
       <ChatMessages
         :responses="responses"
-        :messages="chatMessages"
         :done="done"
         :prompt-submitted="promptSubmitted"
       />
@@ -146,7 +143,6 @@ const onSubmitPrompt = () => {
         @on-set-done="onSetDone"
         @on-reset-responses="onResetResponses"
         @on-submit-prompt="onSubmitPrompt"
-        :messages="chatMessages"
         :done="done"
       />
     </div>

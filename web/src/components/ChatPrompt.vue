@@ -1,14 +1,9 @@
 <script setup lang="ts">
 import type { ChatResponse, Message } from "ollama";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { logger } from "../libs/logger";
 import { ollama } from "../libs/ollama";
-import type { ChatMessage } from "../schemas";
-
-const { messages = [] } = defineProps<{
-  messages: ChatMessage[];
-  done: boolean;
-}>();
+import { chatStore } from "../stores/chatStore";
 
 const emit = defineEmits<{
   "on-receive-response": [response: ChatResponse];
@@ -18,6 +13,7 @@ const emit = defineEmits<{
   "on-submit-prompt": [];
 }>();
 
+const messages = computed(() => chatStore.chatMessages);
 const prompt = ref("");
 
 const onSubmit = async () => {
@@ -36,7 +32,12 @@ const onSubmit = async () => {
 
     const response = await ollama.chat({
       model: "llama2",
-      messages,
+      messages: messages.value.map(
+        ({ role, content }): Message => ({
+          role,
+          content,
+        }),
+      ),
       stream: true,
     });
     logger.trace(response);
