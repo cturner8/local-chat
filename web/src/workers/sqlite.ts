@@ -1,7 +1,7 @@
 import type { BindingSpec, Database } from "@sqlite.org/sqlite-wasm";
 import initSqlite from "@sqlite.org/sqlite-wasm";
 
-import { LOG_LEVEL } from "../config";
+import { DEV, IN_MEMORY_DB, LOG_LEVEL } from "../config";
 import { logger } from "../libs/logger";
 
 if (typeof self !== "undefined" && typeof window === "undefined") {
@@ -37,7 +37,10 @@ const start = async () => {
 
     const opfsAvailable = "opfs" in sqlite3;
     logger.trace("OPFS Available", opfsAvailable);
-    db = new sqlite3.oo1.OpfsDb(DB_FILE_NAME, dbFlags);
+    db = new sqlite3.oo1.OpfsDb(
+      DEV && IN_MEMORY_DB ? ":memory:" : DB_FILE_NAME,
+      dbFlags,
+    );
     logger.trace("Created database", db.filename);
 
     logger.trace("Creating tables...");
