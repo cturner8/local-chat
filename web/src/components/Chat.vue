@@ -39,11 +39,19 @@ const initChat = () => {
   logger.debug("Initializing new chat");
 
   chatStore.selectedChatId = crypto.randomUUID();
+
   const now = Date.now();
+  const formattedDateString = new Intl.DateTimeFormat(navigator.language, {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  }).format(now);
 
   const chat: Chat = {
     id: chatId.value,
-    title: "new chat",
+    title: formattedDateString,
     createdDate: now,
     updatedDate: now,
   };
@@ -127,6 +135,14 @@ const onSubmitPrompt = () => {
     promptSubmitted.value = true;
   }
 };
+
+const onReceiveTopic = (topic: string) => {
+  logger.trace(topic);
+  sqlite.postMessage([
+    `update chats set title = ? where id = ?`,
+    [topic, chatId.value],
+  ]);
+};
 </script>
 
 <template>
@@ -143,6 +159,7 @@ const onSubmitPrompt = () => {
         @on-set-done="onSetDone"
         @on-reset-responses="onResetResponses"
         @on-submit-prompt="onSubmitPrompt"
+        @on-receive-topic="onReceiveTopic"
         :done="done"
       />
     </div>

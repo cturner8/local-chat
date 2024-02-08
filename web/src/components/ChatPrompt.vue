@@ -11,11 +11,49 @@ const emit = defineEmits<{
   "on-set-done": [done: boolean];
   "on-reset-responses": [];
   "on-submit-prompt": [];
+  "on-receive-topic": [topic: string];
 }>();
 
 const model = computed(() => chatStore.selectedModel);
 const messages = computed(() => chatStore.chatMessages);
 const prompt = ref("");
+
+const extractChatTopic = (userPrompt: string) => {
+  logger.debug("Extracting chat topic");
+  logger.debug("User prompt:", userPrompt);
+  ollama
+    .generate({
+      model: model.value,
+      prompt: `what is the topic of the following question? '${userPrompt}'. reply with key of 'topic' and the value in title case`,
+      stream: false,
+      options: {
+        temperature: 0.1,
+        num_predict: 60,
+      },
+      format: "json",
+    })
+    .then((result) => {
+      logger.debug("Extract topic response:", result);
+      let topic = "";
+
+      try {
+        const response = JSON.parse(result.response) as Record<string, string>;
+        logger.debug("Model response:", response);
+
+        if (response["topic"]) {
+          topic = response["topic"];
+          logger.debug("Topic:", topic);
+
+          emit("on-receive-topic", topic);
+        } else {
+          logger.debug("Topic not found");
+        }
+      } catch (e) {
+        logger.error(e);
+      }
+    })
+    .catch((error) => logger.error(error));
+};
 
 const onSubmit = async () => {
   try {
@@ -27,6 +65,10 @@ const onSubmit = async () => {
       content: prompt.value,
     };
     emit("on-receive-message", userMessage);
+    // extract the chat topic if first message in the chat
+    if (messages.value.length === 1) {
+      extractChatTopic(prompt.value);
+    }
 
     prompt.value = "";
     logger.debug(messages);

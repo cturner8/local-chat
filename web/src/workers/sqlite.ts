@@ -35,10 +35,13 @@ const start = async () => {
 
     const dbFlags = LOG_LEVEL === "trace" ? "ct" : "c";
 
+    const useInMemoryMode = DEV && IN_MEMORY_DB === "true";
     const opfsAvailable = "opfs" in sqlite3;
     logger.trace("OPFS Available", opfsAvailable);
+    logger.trace("In memory mode:", useInMemoryMode);
+
     db = new sqlite3.oo1.OpfsDb(
-      DEV && IN_MEMORY_DB ? ":memory:" : DB_FILE_NAME,
+      DEV && IN_MEMORY_DB === "true" ? ":memory:" : DB_FILE_NAME,
       dbFlags,
     );
     logger.trace("Created database", db.filename);
