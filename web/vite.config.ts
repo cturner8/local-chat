@@ -16,7 +16,6 @@ export default defineConfig(({ mode }) => {
       vue(),
       tsconfigPaths(),
       nodePolyfills({
-        include: ["fs", "path", "crypto", "os", "stream", "util"],
         overrides: {
           // Since `fs` is not supported in browsers, we can use the `memfs` package to polyfill it.
           fs: "memfs",

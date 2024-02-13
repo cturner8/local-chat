@@ -12,11 +12,7 @@ type ChatMessageWithHtml = ChatMessage & { htmlContent: string };
 
 const converter = new showdown.Converter();
 
-const {
-  responses = [],
-  done,
-  promptSubmitted,
-} = defineProps<{
+const { responses, done, promptSubmitted } = defineProps<{
   responses: ChatResponse[];
   done: boolean;
   promptSubmitted: boolean;
