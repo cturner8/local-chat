@@ -1,10 +1,16 @@
 <script setup lang="ts">
+import DOMPurify from "dompurify";
 import type { ChatResponse } from "ollama";
+import showdown from "showdown";
 import { computed, onBeforeUnmount, watch } from "vue";
 import { logger } from "../libs/logger";
 import type { ChatMessage } from "../schemas";
 import { chatStore } from "../stores/chatStore";
 import SqliteWorker from "../workers/sqlite?worker";
+
+type ChatMessageWithHtml = ChatMessage & { htmlContent: string };
+
+const converter = new showdown.Converter();
 
 const {
   responses = [],
@@ -18,7 +24,25 @@ const {
 
 const chatId = computed(() => chatStore.selectedChatId);
 const fetchedChatMessageIds = computed(() => chatStore.fetchedChatMessageIds);
-const messages = computed(() => chatStore.chatMessages);
+
+const messages = computed<ChatMessageWithHtml[]>(() =>
+  chatStore.chatMessages.map((message): ChatMessageWithHtml => {
+    const html = converter.makeHtml(message.content);
+    const cleanHtml = DOMPurify.sanitize(html);
+    return {
+      ...message,
+      htmlContent: cleanHtml,
+    };
+  }),
+);
+
+const responseContent = computed(() => {
+  const html = converter.makeHtml(
+    responses.map((response) => response.message.content).join(""),
+  );
+  const cleanHtml = DOMPurify.sanitize(html);
+  return cleanHtml;
+});
 
 const sqlite = new SqliteWorker();
 sqlite.onmessage = (
@@ -65,22 +89,20 @@ onBeforeUnmount(() => {
   <div
     class="flex flex-col grow gap-4 w-full h-full overflow-y-auto p-2 text-left"
   >
-    <p
+    <span
       v-for="message in messages"
       :key="message.id"
       :class="[
         'dark:text-white rounded-md p-3 text-pretty whitespace-pre-line',
         message.role === 'user' && 'bg-primary',
       ]"
-    >
-      {{ message.content }}
-    </p>
-    <p
+      :innerHTML="message.htmlContent"
+    />
+    <span
       v-if="!done && responses.length"
       class="dark:text-white rounded-md p-3 text-pretty whitespace-pre-line"
-    >
-      {{ responses.map((response) => response.message.content).join("") }}
-    </p>
+      :innerHTML="responseContent"
+    />
     <template v-if="!done">
       <p
         v-if="promptSubmitted && !responses.length"
