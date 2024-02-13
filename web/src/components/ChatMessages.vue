@@ -69,7 +69,7 @@ onBeforeUnmount(() => {
       v-for="message in messages"
       :key="message.id"
       :class="[
-        'dark:text-white rounded-md p-3 text-pretty',
+        'dark:text-white rounded-md p-3 text-pretty whitespace-pre-line',
         message.role === 'user' && 'bg-primary',
       ]"
     >
@@ -77,7 +77,7 @@ onBeforeUnmount(() => {
     </p>
     <p
       v-if="!done && responses.length"
-      class="dark:text-white rounded-md p-3 text-pretty"
+      class="dark:text-white rounded-md p-3 text-pretty whitespace-pre-line"
     >
       {{ responses.map((response) => response.message.content).join("") }}
     </p>
