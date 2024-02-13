@@ -28,7 +28,9 @@ const fetchedChatMessageIds = computed(() => chatStore.fetchedChatMessageIds);
 const messages = computed<ChatMessageWithHtml[]>(() =>
   chatStore.chatMessages.map((message): ChatMessageWithHtml => {
     const html = converter.makeHtml(message.content);
-    const cleanHtml = DOMPurify.sanitize(html);
+    const cleanHtml = DOMPurify.sanitize(html, {
+      USE_PROFILES: { html: true },
+    });
     return {
       ...message,
       htmlContent: cleanHtml,
@@ -40,7 +42,9 @@ const responseContent = computed(() => {
   const html = converter.makeHtml(
     responses.map((response) => response.message.content).join(""),
   );
-  const cleanHtml = DOMPurify.sanitize(html);
+  const cleanHtml = DOMPurify.sanitize(html, {
+    USE_PROFILES: { html: true },
+  });
   return cleanHtml;
 });
 
