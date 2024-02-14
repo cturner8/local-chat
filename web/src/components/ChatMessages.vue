@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import DOMPurify from "dompurify";
-import type { ChatResponse } from "ollama";
 import showdown from "showdown";
 import { computed, onBeforeUnmount, watch } from "vue";
 import { logger } from "../libs/logger";
@@ -12,10 +11,11 @@ type ChatMessageWithHtml = ChatMessage & { htmlContent: string };
 
 const converter = new showdown.Converter();
 
-const { responses, done, promptSubmitted } = defineProps<{
-  responses: ChatResponse[];
+const { responseContent, done, promptSubmitted, hasResponses } = defineProps<{
+  responseContent: string;
   done: boolean;
   promptSubmitted: boolean;
+  hasResponses: boolean;
 }>();
 
 const chatId = computed(() => chatStore.selectedChatId);
@@ -33,16 +33,6 @@ const messages = computed<ChatMessageWithHtml[]>(() =>
     };
   }),
 );
-
-const responseContent = computed(() => {
-  const html = converter.makeHtml(
-    responses.map((response) => response.message.content).join(""),
-  );
-  const cleanHtml = DOMPurify.sanitize(html, {
-    USE_PROFILES: { html: true },
-  });
-  return cleanHtml;
-});
 
 const sqlite = new SqliteWorker();
 sqlite.onmessage = (
@@ -99,18 +89,18 @@ onBeforeUnmount(() => {
       :innerHTML="message.htmlContent"
     />
     <span
-      v-if="!done && responses.length"
+      v-if="!done && hasResponses"
       class="dark:text-white rounded-md p-3 text-pretty whitespace-pre-line"
       :innerHTML="responseContent"
     />
     <template v-if="!done">
       <p
-        v-if="promptSubmitted && !responses.length"
+        v-if="promptSubmitted && !hasResponses"
         class="dark:text-white rounded-md p-3"
       >
         Thinking...
       </p>
-      <p v-else-if="responses.length" class="dark:text-white rounded-md p-3">
+      <p v-else-if="hasResponses" class="dark:text-white rounded-md p-3">
         Typing...
       </p>
     </template>

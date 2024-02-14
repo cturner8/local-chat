@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import DOMPurify from "dompurify";
 import type { ChatResponse, Message } from "ollama";
+import showdown from "showdown";
 import { computed, onBeforeUnmount, ref, watch } from "vue";
 
 import { logger } from "../libs/logger";
@@ -8,6 +10,8 @@ import { chatStore } from "../stores/chatStore";
 import SqliteWorker from "../workers/sqlite?worker";
 import ChatMessages from "./ChatMessages.vue";
 import ChatPrompt from "./ChatPrompt.vue";
+
+const converter = new showdown.Converter();
 
 const sqlite = new SqliteWorker();
 sqlite.onmessage = (message) => {
@@ -34,6 +38,16 @@ watch(chatMessages, () => {
 const promptSubmitted = ref(false);
 const done = ref(false);
 const responses = ref<ChatResponse[]>([]);
+
+const responseContent = computed(() => {
+  const html = converter.makeHtml(
+    responses.value.map((response) => response.message.content).join(""),
+  );
+  const cleanHtml = DOMPurify.sanitize(html, {
+    USE_PROFILES: { html: true },
+  });
+  return cleanHtml;
+});
 
 const initChat = () => {
   logger.debug("Initializing new chat");
@@ -149,7 +163,8 @@ const onReceiveTopic = (topic: string) => {
   <div class="h-full w-full flex flex-col grow justify-center items-center">
     <div class="flex flex-col h-full w-full md:max-w-3xl justify-end">
       <ChatMessages
-        :responses="responses"
+        :response-content="responseContent"
+        :has-responses="Boolean(responses.length)"
         :done="done"
         :prompt-submitted="promptSubmitted"
       />
