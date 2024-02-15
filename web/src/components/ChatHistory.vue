@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted } from "vue";
+import ChatActions from "./ChatActions.vue";
 import ModelSelectMenu from "./ModelSelectMenu.vue";
 
-import { PlusIcon } from "@heroicons/vue/20/solid";
 import { logger } from "../libs/logger";
 import type { ChatHistory } from "../schemas";
 import { chatStore } from "../stores/chatStore";
@@ -37,13 +37,8 @@ onBeforeUnmount(() => {
 <template>
   <div class="dark:bg-layout md:w-3/12 rounded-r-md p-3 text-left">
     <div class="flex justify-between">
-      <h1>My Chats</h1>
-      <button
-        class="px-2 rounded-md hover:bg-contrast"
-        @click="chatStore.selectedChatId = ''"
-      >
-        <PlusIcon class="h-5 w-5 dark:text-white" />
-      </button>
+      <h1 class="font-semibold">My Chats</h1>
+      <ChatActions />
     </div>
     <ModelSelectMenu />
     <div v-if="chats.length" class="flex flex-col my-6 gap-4">
