@@ -44,5 +44,6 @@ RUN yarn build
 
 FROM nginx:${NGINX_TAG} as runner
 
+COPY ollama.nginx.conf /etc/nginx/includes/ollama.conf
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
