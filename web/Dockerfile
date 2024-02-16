@@ -11,9 +11,9 @@ LABEL org.opencontainers.image.source https://github.com/cturner8/local-chat
 
 WORKDIR /tmp
 
-COPY .yarn .yarn
+COPY web/.yarn .yarn
 
-COPY .yarnrc.yml package.json yarn.lock ./
+COPY web/.yarnrc.yml web/package.json web/yarn.lock ./
 RUN --mount=type=cache,target=/root/.yarn \
     yarn install --immutable
 
@@ -24,7 +24,7 @@ WORKDIR /usr/src/app
 COPY --chown=node:node --from=deps /tmp/.yarn ./.yarn
 COPY --chown=node:node --from=deps /tmp/node_modules ./node_modules
 
-COPY --chown=node:node . .
+COPY --chown=node:node web/ .
 
 RUN chmod 777 /usr/src/app
 
@@ -38,12 +38,12 @@ WORKDIR /usr/src/app
 
 COPY --from=deps /tmp/node_modules ./node_modules
 
-COPY . .
+COPY web/ .
 
 RUN yarn build
 
 FROM nginx:${NGINX_TAG} as runner
 
-COPY ollama.nginx.conf /etc/nginx/includes/ollama.conf
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx/includes/ /etc/nginx/includes/
+COPY nginx/*.conf /etc/nginx/conf.d/
 COPY --from=builder /usr/src/app/dist /usr/share/nginx/html

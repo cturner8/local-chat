@@ -4,7 +4,11 @@ services:
   web:
     image: ghcr.io/cturner8/local-chat:latest
     build:
-      context: web
+      context: .
+      dockerfile: web/Dockerfile
+      additional_contexts:
+        web: web
+        nginx: nginx
       target: runner
     ports:
       - 80:80
