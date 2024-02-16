@@ -1,18 +1,14 @@
 <script setup lang="ts">
 import { PlusIcon, SunIcon } from "@heroicons/vue/20/solid";
-import { useDark, usePreferredColorScheme, useToggle } from "@vueuse/core";
+import { useDark, useToggle } from "@vueuse/core";
 import { chatStore } from "../stores/chatStore";
 
-const preferredColorScheme = usePreferredColorScheme();
 const isDark = useDark({
   attribute: "data-theme",
   valueDark: "dark",
   valueLight: "light",
   storageKey: "local-chat-theme",
-  initialValue:
-    preferredColorScheme.value !== "no-preference"
-      ? preferredColorScheme.value
-      : "auto",
+  initialValue: "dark",
 });
 const toggleDark = useToggle(isDark);
 </script>
@@ -23,10 +19,10 @@ const toggleDark = useToggle(isDark);
       class="px-2 rounded-md hover:bg-contrast"
       @click="chatStore.selectedChatId = ''"
     >
-      <PlusIcon class="h-5 w-5 dark:text-white" />
+      <PlusIcon class="h-5 w-5 prose dark:prose-invert" />
     </button>
     <button class="px-2 rounded-md hover:bg-contrast" @click="toggleDark()">
-      <SunIcon class="h-5 w-5 dark:text-white" />
+      <SunIcon class="h-5 w-5 prose dark:prose-invert" />
     </button>
   </span>
 </template>

@@ -52,15 +52,17 @@ onBeforeUnmount(() => {
 
 <template>
   <Listbox as="div" v-model="selectedModel" class="my-4">
-    <ListboxLabel class="block text-sm font-medium leading-6 dark:text-white">
+    <ListboxLabel
+      class="block text-sm font-medium leading-6 prose dark:prose-invert"
+    >
       Active Model
     </ListboxLabel>
     <div class="relative mt-2">
       <ListboxButton
-        class="relative w-full cursor-default rounded-md bg-white dark:bg-contrast py-1.5 pl-3 pr-10 text-left text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm sm:leading-6"
+        class="relative w-full cursor-default rounded-md bg-white dark:bg-contrast py-1.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm sm:leading-6"
       >
         <span class="flex items-center">
-          <span class="ml-3 block truncate">{{
+          <span class="ml-3 block truncate prose dark:prose-invert">{{
             selectedModel?.name ?? "None"
           }}</span>
         </span>
@@ -68,7 +70,7 @@ onBeforeUnmount(() => {
           class="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2"
         >
           <ChevronUpDownIcon
-            class="h-5 w-5 text-gray-400 dark:text-white"
+            class="h-5 w-5 text-gray-400 prose dark:prose-invert"
             aria-hidden="true"
           />
         </span>
@@ -91,17 +93,15 @@ onBeforeUnmount(() => {
           >
             <li
               :class="[
-                active
-                  ? 'bg-primary text-white'
-                  : 'text-gray-900 dark:text-white',
-                'relative cursor-default select-none py-2 pl-3 pr-9',
+                active ? 'bg-primary ' : 'text-gray-900 ',
+                'relative cursor-default select-none py-2 pl-3 pr-9 prose dark:prose-invert',
               ]"
             >
               <div class="flex items-center">
                 <span
                   :class="[
                     selected ? 'font-semibold' : 'font-normal',
-                    'ml-3 block truncate',
+                    'ml-3 block truncate prose dark:prose-invert',
                   ]"
                   >{{ model.name }}</span
                 >
@@ -110,8 +110,8 @@ onBeforeUnmount(() => {
               <span
                 v-if="selected"
                 :class="[
-                  active ? 'text-white' : 'text-primary',
-                  'absolute inset-y-0 right-0 flex items-center pr-4',
+                  // active ? 'text-white' : 'text-primary',
+                  'absolute inset-y-0 right-0 flex items-center pr-4 prose dark:prose-invert',
                 ]"
               >
                 <CheckIcon class="h-5 w-5" aria-hidden="true" />

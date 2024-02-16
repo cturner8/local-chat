@@ -18,7 +18,18 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  plugins: [
+    require("@tailwindcss/typography"),
+    require("@tailwindcss/forms"),
+    require("@tailwindcss/aspect-ratio"),
+    require("@tailwindcss/container-queries"),
+    // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-call
+    require("tailwind-scrollbar")({
+      preferredStrategy: "pseudoelements",
+      nocompatible: true,
+    }),
+  ],
 };
 
 export default config;

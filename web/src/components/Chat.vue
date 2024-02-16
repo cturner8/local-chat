@@ -161,7 +161,7 @@ const onReceiveTopic = (topic: string) => {
 
 <template>
   <div class="h-full w-full flex flex-col grow justify-center items-center">
-    <div class="flex flex-col h-full w-full md:max-w-3xl justify-end">
+    <div class="flex flex-col h-full w-full md:max-w-4xl justify-end">
       <ChatMessages
         :response-content="responseContent"
         :has-responses="Boolean(responses.length)"

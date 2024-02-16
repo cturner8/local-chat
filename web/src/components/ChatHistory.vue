@@ -35,9 +35,9 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="dark:bg-layout md:w-3/12 rounded-r-md p-3 text-left">
+  <div class="dark:bg-layout md:w-3/12 rounded-r-md p-3">
     <div class="flex justify-between">
-      <h1 class="font-semibold">My Chats</h1>
+      <h1 class="font-semibold prose dark:prose-invert">My Chats</h1>
       <ChatActions />
     </div>
     <ModelSelectMenu />
@@ -45,7 +45,7 @@ onBeforeUnmount(() => {
       <button
         v-for="chat in chats"
         :key="chat.id"
-        class="p-3 rounded-md hover:bg-contrast text-left"
+        class="p-3 rounded-md hover:bg-contrast prose dark:prose-invert text-left"
         :class="{ 'bg-primary': chat.id === selectedChatId }"
         @click="chatStore.selectedChatId = chat.id"
       >

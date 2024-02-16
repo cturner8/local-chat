@@ -77,30 +77,33 @@ onBeforeUnmount(() => {
 
 <template>
   <div
-    class="flex flex-col grow gap-4 w-full h-full overflow-y-auto p-2 text-left"
+    class="flex flex-col grow gap-4 w-full h-full p-3 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-md scrollbar-track-rounded-md scrollbar-thumb-layout scrollbar-track-transparent scrollbar-corner-transparent"
   >
     <span
       v-for="message in messages"
       :key="message.id"
       :class="[
-        'dark:text-white rounded-md p-3 text-pretty whitespace-pre-line',
+        'prose dark:prose-invert max-w-none rounded-md p-3 prose-code:text-wrap',
         message.role === 'user' && 'bg-primary',
       ]"
       :innerHTML="message.htmlContent"
     />
     <span
       v-if="!done && hasResponses"
-      class="dark:text-white rounded-md p-3 text-pretty whitespace-pre-line"
+      class="prose dark:prose-invert max-w-none rounded-md p-3 prose-code:text-wrap"
       :innerHTML="responseContent"
     />
     <template v-if="!done">
       <p
         v-if="promptSubmitted && !hasResponses"
-        class="dark:text-white rounded-md p-3"
+        class="rounded-md p-3 prose dark:prose-invert"
       >
         Thinking...
       </p>
-      <p v-else-if="hasResponses" class="dark:text-white rounded-md p-3">
+      <p
+        v-else-if="hasResponses"
+        class="rounded-md p-3 prose dark:prose-invert"
+      >
         Typing...
       </p>
     </template>
