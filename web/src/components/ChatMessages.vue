@@ -77,7 +77,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div
-    class="flex flex-col grow gap-4 w-full h-full p-3 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-md scrollbar-track-rounded-md scrollbar-thumb-layout scrollbar-track-transparent scrollbar-corner-transparent"
+    class="flex flex-col grow gap-4 w-full h-full p-3 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-md scrollbar-track-rounded-md scrollbar-thumb-layoutLight dark:scrollbar-thumb-layoutDark scrollbar-track-transparent scrollbar-corner-transparent"
   >
     <span
       v-for="message in messages"

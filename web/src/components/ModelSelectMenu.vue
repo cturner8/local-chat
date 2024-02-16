@@ -59,7 +59,7 @@ onBeforeUnmount(() => {
     </ListboxLabel>
     <div class="relative mt-2">
       <ListboxButton
-        class="relative w-full cursor-default rounded-md bg-white dark:bg-contrast py-1.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm sm:leading-6"
+        class="relative w-full cursor-default rounded-md bg-white dark:bg-contrastDark py-1.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm sm:leading-6"
       >
         <span class="flex items-center">
           <span class="ml-3 block truncate prose dark:prose-invert">{{

@@ -16,12 +16,15 @@ const toggleDark = useToggle(isDark);
 <template>
   <span>
     <button
-      class="px-2 rounded-md hover:bg-contrast"
+      class="px-2 rounded-md hover:bg-contrastLight dark:hover:bg-contrastDark"
       @click="chatStore.selectedChatId = ''"
     >
       <PlusIcon class="h-5 w-5 prose dark:prose-invert" />
     </button>
-    <button class="px-2 rounded-md hover:bg-contrast" @click="toggleDark()">
+    <button
+      class="px-2 rounded-md hover:bg-contrastLight dark:hover:bg-contrastDark"
+      @click="toggleDark()"
+    >
       <SunIcon class="h-5 w-5 prose dark:prose-invert" />
     </button>
   </span>
