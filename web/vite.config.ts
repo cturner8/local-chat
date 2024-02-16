@@ -5,11 +5,11 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  const {
-    HTTPS_CERT_PATH = "./certs/localhost.pem",
-    HTTPS_KEY_PATH = "./certs/localhost-key.pem",
-    OLLAMA_PROXY_URL = "http://host.docker.internal:11434",
-  } = loadEnv(mode, process.cwd(), "");
+  const { HTTPS_CERT_PATH, HTTPS_KEY_PATH, OLLAMA_PROXY_URL } = loadEnv(
+    mode,
+    process.cwd(),
+    "",
+  );
 
   return {
     plugins: [
@@ -24,9 +24,6 @@ export default defineConfig(({ mode }) => {
     ],
     server: {
       host: true,
-      // hmr: {
-      //   port: 3101,
-      // },
       proxy: {
         "/api": OLLAMA_PROXY_URL,
       },

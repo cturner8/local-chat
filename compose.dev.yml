@@ -1,12 +1,14 @@
 services:
   web:
     build:
-      context: web
+      context: .
+      dockerfile: web/Dockerfile
+      additional_contexts:
+        web: web
       target: dev
     configs: []
     ports:
       - 5173:5173
-      # - 3101:3101
     environment:
       HTTPS_CERT_PATH: /run/secrets/site.crt
       HTTPS_KEY_PATH: /run/secrets/site.key
