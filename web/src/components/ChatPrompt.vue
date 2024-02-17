@@ -19,15 +19,21 @@ const messages = computed(() => chatStore.chatMessages);
 const prompt = ref("");
 
 const extractChatTopic = (userPrompt: string) => {
-  logger.debug("Extracting chat topic");
+  logger.debug("Extracting chat topic using", model.value);
   logger.debug("User prompt:", userPrompt);
   ollama
     .generate({
       model: model.value,
-      prompt: `what is the topic of the following question? '${userPrompt}'. reply with key of 'topic' and the value in title case`,
+      system:
+        "you are a data analyst tasked with analysing user prompts to find the topic of conversation. you must provide a response in json format using the schema of `{topic: string }` where the topic value is in title case.",
+      /*
+          despite the use of the above system prompt, also need to provide some of that information in the user prompt
+          as not all models seem to work well with the system prompt e.g. phi
+      */
+      prompt: `'${userPrompt}'. reply with only the topic name in title case using the schema of '{topic: string }'`,
       stream: false,
       options: {
-        temperature: 0.1,
+        temperature: 1,
         num_predict: 60,
       },
       format: "json",
@@ -40,8 +46,14 @@ const extractChatTopic = (userPrompt: string) => {
         const response = JSON.parse(result.response) as Record<string, string>;
         logger.debug("Model response:", response);
 
-        if (response["topic"]) {
-          topic = response["topic"];
+        const responseKeys = Object.keys(response);
+        let topicKey = "topic";
+        if (responseKeys.includes("Topic") && !responseKeys.includes("topic")) {
+          topicKey = "Topic";
+        }
+
+        if (response[topicKey]) {
+          topic = response[topicKey] ?? "";
           logger.debug("Topic:", topic);
 
           emit("on-receive-topic", topic);
