@@ -111,7 +111,7 @@ const onSubmit = async () => {
     <input
       v-model="prompt"
       :disabled="!model"
-      class="w-full bg-transparent border-2 border-primary focus:border-secondary rounded-md p-3 prose dark:prose-invert max-w-none"
+      class="w-full bg-transparent border-2 border-primary rounded-md p-3 prose dark:prose-invert max-w-none"
       placeholder="Ask a question..."
     />
   </form>

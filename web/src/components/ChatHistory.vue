@@ -46,7 +46,10 @@ onBeforeUnmount(() => {
         v-for="chat in chats"
         :key="chat.id"
         class="p-3 rounded-md hover:bg-contrastLight dark:hover:bg-contrastDark prose dark:prose-invert text-left"
-        :class="{ 'bg-primary': chat.id === selectedChatId }"
+        :class="{
+          'bg-primary hover:bg-primaryFocusLight dark:hover:bg-primaryFocusDark':
+            chat.id === selectedChatId,
+        }"
         @click="chatStore.selectedChatId = chat.id"
       >
         {{ chat.title }}

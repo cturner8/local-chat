@@ -35,7 +35,9 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="w-screen h-screen flex flex-row dark:bg-neutral font-sans">
+  <div
+    class="w-screen h-screen flex flex-row bg-neutralLight dark:bg-neutralDark font-sans"
+  >
     <ChatHistory />
     <Chat />
   </div>
