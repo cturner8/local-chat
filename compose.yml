@@ -1,0 +1,43 @@
+name: local-chat
+
+services:
+  web:
+    image: ghcr.io/cturner8/local-chat:latest
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+      additional_contexts:
+        web: web
+        nginx: nginx
+      target: runner
+    ports:
+      - 80:80
+      - 443:443
+    secrets:
+      - source: web_cert
+        target: site.crt
+      - source: web_key
+        target: site.key
+    networks:
+      - local_chat
+
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - local_chat
+
+volumes:
+  ollama_data:
+    external: true
+
+networks:
+  local_chat: {}
+
+secrets:
+  web_cert:
+    file: ./web/certs/localhost.pem
+  web_key:
+    file: ./web/certs/localhost-key.pem

@@ -1,30 +1,44 @@
 <script setup lang="ts">
-import HelloWorld from "./components/HelloWorld.vue";
+import { onBeforeUnmount, onMounted } from "vue";
+import Chat from "./components/Chat.vue";
+import ChatHistory from "./components/ChatHistory.vue";
+import { logger } from "./libs/logger";
+import { ollama } from "./libs/ollama";
+import type { Preference } from "./schemas";
+import { chatStore } from "./stores/chatStore";
+import SqliteWorker from "./workers/sqlite?worker";
+
+const sqlite = new SqliteWorker();
+sqlite.onmessage = (message: MessageEvent<[string, string][]>) => {
+  logger.info(message.data);
+  const mappedPreferences = message.data.map(
+    ([id = "", value = ""]): Preference => ({ id, value }),
+  );
+  chatStore.preferences = mappedPreferences;
+};
+
+onMounted(() => {
+  sqlite.postMessage([`select id, value from preferences`]);
+  ollama
+    .list()
+    .then((response) => {
+      logger.debug(response);
+      const { models = [] } = response;
+      chatStore.models = models;
+    })
+    .catch((error) => logger.error(error));
+});
+
+onBeforeUnmount(() => {
+  sqlite.terminate();
+});
 </script>
 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div
+    class="w-screen h-screen flex flex-row bg-neutralLight dark:bg-neutralDark font-sans"
+  >
+    <ChatHistory />
+    <Chat />
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
-
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
