@@ -292,13 +292,13 @@ __metadata:
   linkType: hard
 
 "@headlessui/vue@npm:^1.7.18":
-  version: 1.7.18
-  resolution: "@headlessui/vue@npm:1.7.18"
+  version: 1.7.23
+  resolution: "@headlessui/vue@npm:1.7.23"
   dependencies:
     "@tanstack/vue-virtual": "npm:^3.0.0-beta.60"
   peerDependencies:
     vue: ^3.2.0
-  checksum: 10c0/324b1b56cef6c4c0555e73042ab2c12c78c3cbfeede2412e3d55e4e164a00732788b8087e5a42724d1b2806e24992770f6cc2e13eca82ed342a2151882dfb49c
+  checksum: 10c0/6c570ab66ff7b0c2f115ab062dd8a08ce769263f5236422ecb298bfcb3d19d15fc83272d009f3c4159b8da3777ad048bf0ef49e258368096ae3b71085417fe13
   languageName: node
   linkType: hard
 
@@ -3913,13 +3913,6 @@ __metadata:
     sha.js: "npm:^2.4.11"
     to-buffer: "npm:^1.2.0"
   checksum: 10c0/12779463dfb847701f186e0b7e5fd538a1420409a485dcf5100689c2b3ec3cb113204e82a68668faf3b6dd76ec19260b865313c9d3a9c252807163bdc24652ae
-  languageName: node
-  linkType: hard
-
-"picocolors@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "picocolors@npm:1.0.0"
-  checksum: 10c0/20a5b249e331c14479d94ec6817a182fd7a5680debae82705747b2db7ec50009a5f6648d0621c561b0572703f84dbef0858abcbd5856d3c5511426afcb1961f7
   languageName: node
   linkType: hard
 
