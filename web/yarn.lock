@@ -712,9 +712,9 @@ __metadata:
   linkType: hard
 
 "@tsconfig/recommended@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "@tsconfig/recommended@npm:1.0.3"
-  checksum: 10c0/2744d2798d52d337a7b0b78f6efa070ecda4e42262e93589d4bed615a55639a84035a8e3b2b020f2396f1f7832294b8c00d7acc78e644418566447ca53df9078
+  version: 1.0.10
+  resolution: "@tsconfig/recommended@npm:1.0.10"
+  checksum: 10c0/402ef03da7300ea0f9f9d6e0507dcb8782c6b764c1f45b946a6c34f2bd3153571a1a85f10659606c24d1052aed699c3e32dd0da876e8f7eea577374eeeb80d17
   languageName: node
   linkType: hard
 
@@ -3913,13 +3913,6 @@ __metadata:
     sha.js: "npm:^2.4.11"
     to-buffer: "npm:^1.2.0"
   checksum: 10c0/12779463dfb847701f186e0b7e5fd538a1420409a485dcf5100689c2b3ec3cb113204e82a68668faf3b6dd76ec19260b865313c9d3a9c252807163bdc24652ae
-  languageName: node
-  linkType: hard
-
-"picocolors@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "picocolors@npm:1.0.0"
-  checksum: 10c0/20a5b249e331c14479d94ec6817a182fd7a5680debae82705747b2db7ec50009a5f6648d0621c561b0572703f84dbef0858abcbd5856d3c5511426afcb1961f7
   languageName: node
   linkType: hard
 
