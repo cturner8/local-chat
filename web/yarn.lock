@@ -3916,13 +3916,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"picocolors@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "picocolors@npm:1.0.0"
-  checksum: 10c0/20a5b249e331c14479d94ec6817a182fd7a5680debae82705747b2db7ec50009a5f6648d0621c561b0572703f84dbef0858abcbd5856d3c5511426afcb1961f7
-  languageName: node
-  linkType: hard
-
 "picocolors@npm:^1.1.1":
   version: 1.1.1
   resolution: "picocolors@npm:1.1.1"
@@ -4843,9 +4836,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsconfck@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "tsconfck@npm:3.0.1"
+"tsconfck@npm:^3.0.3":
+  version: 3.1.6
+  resolution: "tsconfck@npm:3.1.6"
   peerDependencies:
     typescript: ^5.0.0
   peerDependenciesMeta:
@@ -4853,7 +4846,7 @@ __metadata:
       optional: true
   bin:
     tsconfck: bin/tsconfck.js
-  checksum: 10c0/7b56c5bf8f683fafdf51cb7f00ed94e8cb87b9ea457a07d87868ac2c383a09f7277e14b4f479e88b4bfc621e3c12de13daff00a552d7296b3df735ff0ab7c8e1
+  checksum: 10c0/269c3c513540be44844117bb9b9258fe6f8aeab026d32aeebf458d5299125f330711429dbb556dbf125a0bc25f4a81e6c24ac96de2740badd295c3fb400f66c4
   languageName: node
   linkType: hard
 
@@ -5009,18 +5002,18 @@ __metadata:
   linkType: hard
 
 "vite-tsconfig-paths@npm:^4.3.1":
-  version: 4.3.1
-  resolution: "vite-tsconfig-paths@npm:4.3.1"
+  version: 4.3.2
+  resolution: "vite-tsconfig-paths@npm:4.3.2"
   dependencies:
     debug: "npm:^4.1.1"
     globrex: "npm:^0.1.2"
-    tsconfck: "npm:^3.0.1"
+    tsconfck: "npm:^3.0.3"
   peerDependencies:
     vite: "*"
   peerDependenciesMeta:
     vite:
       optional: true
-  checksum: 10c0/47d95952ebcf99e25aa35b6cf5522ae7d1314386d4baa84b6121128425c6337d43330ec8365070b27e1745278cbaad40728016f9dfde96b3d53f6113d30e1872
+  checksum: 10c0/f390ac1d1c3992fc5ac50f9274c1090f8b55ab34a89ea88893db9a6924a3b26c9f64bc1163615150ad100749db73b6b2cf1d57f6cd60df6e762ceb5b8ad30024
   languageName: node
   linkType: hard
 
