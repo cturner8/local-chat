@@ -303,11 +303,11 @@ __metadata:
   linkType: hard
 
 "@heroicons/vue@npm:^2.1.1":
-  version: 2.1.1
-  resolution: "@heroicons/vue@npm:2.1.1"
+  version: 2.2.0
+  resolution: "@heroicons/vue@npm:2.2.0"
   peerDependencies:
     vue: ">= 3"
-  checksum: 10c0/b80c14291a6406c794697b9a59c1c8a6f847c8ddd87044a7bdd7333250657de4fb2b5bbe00ce658580bfec2d55e033cc212986d8a0052f9da894f979436a550c
+  checksum: 10c0/8872f89cd033ce21363b5457adb7ea6cb9631cfbe85006b4131f9078c75c1c9701fd6d9d727d49c739b8716f4a46ccdd2ffae8c6635fc2528efaf0982759edb3
   languageName: node
   linkType: hard
 
