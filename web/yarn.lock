@@ -3755,12 +3755,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ollama@npm:^0.4.6":
-  version: 0.4.6
-  resolution: "ollama@npm:0.4.6"
+"ollama@npm:^0.5.0":
+  version: 0.5.17
+  resolution: "ollama@npm:0.5.17"
   dependencies:
     whatwg-fetch: "npm:^3.6.20"
-  checksum: 10c0/baa5f931831f6f93cf8f68ea94b2932bfb640261937ca973eb089aebcdcb8b1f198377c7372e246c0e5b1f1a3c5743f47e8b1a453770354a137481f1dd030bf4
+  checksum: 10c0/24091d8ccb5caf5a6216a75a3ffa44802a37fb4443abcd583f5f7ff437fbbd2f1606bb335250c3ca9b6a334e685a592d78105552fa87b3830cd30dd7c825374f
   languageName: node
   linkType: hard
 
@@ -5174,7 +5174,7 @@ __metadata:
     eslint-plugin-vue: "npm:^9.21.0"
     loglevel: "npm:^1.9.1"
     memfs: "npm:^4.6.0"
-    ollama: "npm:^0.4.6"
+    ollama: "npm:^0.5.0"
     postcss: "npm:^8.4.33"
     prettier: "npm:^3.2.4"
     showdown: "npm:^2.1.0"

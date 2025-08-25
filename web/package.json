@@ -19,7 +19,7 @@
     "dompurify": "^3.0.8",
     "loglevel": "^1.9.1",
     "memfs": "^4.6.0",
-    "ollama": "^0.4.6",
+    "ollama": "^0.5.0",
     "showdown": "^2.1.0",
     "vite-plugin-node-polyfills": "^0.19.0",
     "vite-tsconfig-paths": "^4.3.1",
