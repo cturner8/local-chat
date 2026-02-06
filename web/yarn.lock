@@ -763,10 +763,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsconfig/node20@npm:^20.1.2":
-  version: 20.1.9
-  resolution: "@tsconfig/node20@npm:20.1.9"
-  checksum: 10c0/04e4e515dc6ce9386af74accb565884c3771b355208acc3d3dee32f0ce4c1d12e59319e05200fb2b87a8655ed4d8eb9910e36667a91e4683879feea9938d90d1
+"@tsconfig/node22@npm:^22.0.0":
+  version: 22.0.5
+  resolution: "@tsconfig/node22@npm:22.0.5"
+  checksum: 10c0/c64b1d51e1556da9212463799f5096289d2cc8561eaed10cd0a0a36c25790b4c6bed30c0f846afccf8da75b5750326fa281216a908c2b67ead7b55adaf3eda22
   languageName: node
   linkType: hard
 
@@ -5096,7 +5096,7 @@ __metadata:
     "@tailwindcss/container-queries": "npm:^0.1.1"
     "@tailwindcss/forms": "npm:^0.5.7"
     "@tailwindcss/typography": "npm:^0.5.10"
-    "@tsconfig/node20": "npm:^20.1.2"
+    "@tsconfig/node22": "npm:^22.0.0"
     "@tsconfig/recommended": "npm:^1.0.3"
     "@tsconfig/strictest": "npm:^2.0.2"
     "@types/dompurify": "npm:^3.0.5"
