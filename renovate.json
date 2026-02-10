@@ -4,5 +4,5 @@
   "addLabels": ["{{categories}}", "{{depType}}", "{{manager}}"],
   "assignees": ["cturner8"],
   "timezone": "Europe/London",
-  "schedule": "before 9am every monday"
+  "schedule": "before 9am on monday"
 }
